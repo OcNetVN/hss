@@ -1,0 +1,18 @@
+.Blue{
+	color: blue;
+	font-weight: bold;
+}
+.Red{
+	color: red;
+	font-weight: bold;
+}
+
+.red-card
+{
+	background: url('../img/app/redcard.gif') no-repeat top left;
+	display: inline-block;
+    height: 10px;
+    width: 20px;
+    zoom: 1;
+    *display:inline;
+}
