@@ -1,0 +1,27 @@
+//**describe the status
+	//status=0:not right login
+	//status=1:right
+	//status=2:locked
+	//status=3:not allow
+	//status=4:not isset imei & insert SUCCESSFULL
+	//status=5:not isset imei & insert ERROR
+
+//lang = 1:english
+//lang = 2: chinese
+
+//**messege
+	//status=0:Not right
+	//status=1:Right
+	//status=2:Account locked
+	//status=3:Not allowed
+	//status=4:Waiting for confirmation
+	//status=5:An error occurred
+	
+//**App mobile request:
+	http://localhost:99/HorseRacing/Source/app/login_mobile?imei=123321&verifycode=6666&lang=1
+
+//**Web return:
+	string: status, messege, phone of agent
+		2,Account locked,0987654321
+		1,Right,0987654321
+		1,Right,NULL
