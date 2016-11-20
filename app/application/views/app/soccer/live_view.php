@@ -18,11 +18,11 @@
                       <?php 
                           if($this->lang->line(LANG_EN) == "English")
                           { // tiếng ANh ?>
-                       <a href="<?php echo base_url('/app/soccer/result'); ?>"> 
+                       <a href="<?php echo base_url('/app/soccer/newresult'); ?>"> 
                       <?php  }
                               else
                               { // Tiếng tàu ?>
-                                 <a href="<?php echo base_url('/app/soccer/result?lang=2'); ?>">
+                                 <a href="<?php echo base_url('/app/soccer/newresult?lang=2'); ?>">
                       <?php   } ?>
                        <!--  <a href="<?php //echo base_url('/app/soccer/result') ?>"> -->
                             <input type="image" name="" id="" title="Result" src="<?php echo base_url('assets/img/app/result_en.png') ?>" style="width:40px;border-width:0px;">

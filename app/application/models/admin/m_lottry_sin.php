@@ -140,21 +140,23 @@ class M_lottry_sin extends CI_Model{
        if(count($listcashweep) > 0)
        {
           $draw_no = $listcashweep[0]['draw_no'];
-          $arr_date   = $listcashweep[0]['txtday'];
-          $arr_date       = explode("/",$arr_date);
+          $arr_date   = $listcashweep[0]['txtday']; 
+          $arr_date       = str_split($arr_date,4);
+      
+         // func_print_test($arr_date1) ;
           $arr_date_choo  = explode("-",$list_date_choo);
-          if(isset($arr_date[0]) && $arr_date[0] != "\t")
-              $day = $arr_date[0];
-          else
-             $day = $arr_date_choo[0];
-          if(isset($arr_date[1]))
-             $month = $arr_date[1];
-          else
-             $month = $arr_date_choo[1];
-           if(isset($arr_date[2]))
+        //  if(isset($arr_date[0]) && $arr_date[0] != "\t")
+              $day = trim($arr_date[0]);
+        //  else
+//             $day = $arr_date_choo[0];
+         // if(isset($arr_date[1]))
+             $month = $this->ConverMonth(trim($arr_date[1]));
+        //  else
+            // $month = $arr_date_choo[1];
+         //  if(isset($arr_date[2]))
              $year = $arr_date[2];
-           else
-             $year = $arr_date_choo[2];
+         //  else
+           //  $year = $arr_date_choo[2];
 
           $txday   = $year.$month.$day;
           $st1     = $listcashweep[0]['st1'];

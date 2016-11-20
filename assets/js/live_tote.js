@@ -12,7 +12,7 @@ var ListSing  = null;
 $(document).ready(function() 
     {
         // show default flag mal
-        //$("#div_Flag_MY").show();
+        $("#div_Flag_MY").show();
         // end show default 
         $("#ChooseCountry").change(function()
             {
@@ -199,7 +199,7 @@ function SelectRaceNoSin_Complete(data)
                 raceNo = parseInt(raceNo) - 1;
 
                 var winMal   = listwin[i].Win;
-              
+
                 winMal = winMal.replace(".00","");
                 if(winMal == -1 || winMal == "-1"){
                     winMal = "SCR";
@@ -207,7 +207,7 @@ function SelectRaceNoSin_Complete(data)
                 if(winMal == 0 || winMal == "0"){
                     winMal = "";
                 } 
-              // console.log(winMal);
+                // console.log(winMal);
                 var placeMal = listwin[i].Place;
                 placeMal = placeMal.replace(".00","");
                 if(placeMal == -1 || placeMal == "-1"){
@@ -1044,25 +1044,27 @@ function ConvertSin(){
 function ConvertSin_Chrome(){
     var txtConvert = $('#ContentConvert').val();
     //var len = txt_convert.length;
-    var lines = txtConvert.split('\n');
-    var soDong = lines.length;
-    //console.log(lines);
-    for(var i=0; i<soDong ; i ++)
+    var lines = txtConvert.split('\n');    
+    var soDong = lines.length;   
+    for(var k=0; k <= 20 ; k++)
     {
-        var dong = lines[i];
-        var cols = dong.split('\t');
-        console.log(cols);
-
-        if(cols.length > 2)
-        {  
-            var s_stt = cols[0];
-            var stt = parseInt(s_stt);
-            if($.isNumeric(stt))
-            {
-                if(stt>0 && stt<21)
-                {
-                    var horseName = cols[1];
-                    var winAmt = cols[cols.length-2];
+        $("#tbGetToteSIN tbody tr:eq(0) td:eq("+k+") input").val("");
+        $("#tbGetToteSIN tbody tr:eq(1) td:eq("+k+") input").val("");
+    }
+    var i=0;    
+    if(lines[3].substring(0,1)=="2")
+    {
+        while(i<soDong)
+        {
+            var dong = lines[i].substring(0,2);  
+            var win =lines[i+1] ;
+            var place=lines[i+2];  
+            i=i+3;
+            for(var j=1; j <= 20 ; j++)
+            {  
+                if(j== parseInt(dong)) 
+                {   
+                    winAmt =   win; 
                     winAmt = winAmt.replace("$","");
                     winAmt = winAmt.replace("\t","");
                     winAmt = winAmt.replace(".00","");
@@ -1070,7 +1072,7 @@ function ConvertSin_Chrome(){
                     winAmt_inter = parseInt(winAmt);
                     if(winAmt > 1000)
                         winAmt = 999;
-                    var placeAmt = cols[cols.length-1]; 
+                    var placeAmt = place; 
                     placeAmt = placeAmt.replace("$","");
                     placeAmt = placeAmt.replace("\t","");
                     placeAmt = placeAmt.replace(".00","");
@@ -1079,14 +1081,136 @@ function ConvertSin_Chrome(){
                     if(placeAmt > 1000)
                         placeAmt = 999;
 
-                    var sNo = stt -1;
+                    var sNo = j-1;
 
                     $("#tbGetToteSIN tbody tr:eq(0) td:eq("+sNo+") input").val(winAmt);
                     $("#tbGetToteSIN tbody tr:eq(1) td:eq("+sNo+") input").val(placeAmt);
-                }
-            }       
-        }   
+                }             
+            } 
+          
+        } 
     }
+    else
+    {
+        while(i<soDong)
+        {
+            var dong = lines[i];      
+            var dong2=  lines[i+2];  
+            var dong3=  lines[i+3];   
+            var win ="" ;
+            var place="";        
+
+            if(dong2.indexOf("SCR") != -1){     
+                win ="SCR" ;
+                place="SCR";             
+                i=i+3;     
+            }
+            else  if(dong.indexOf("1st") != -1){
+                i=i+5;  
+            }  
+            else if($.isNumeric(dong2)){
+                win =  lines[i+2];
+                place=   lines[i+3];
+                i=i+5;   
+            }
+            else if(dong3.indexOf("SCR") != -1 ){
+                win =  lines[i+3];
+                place=   lines[i+3];
+                i=i+5;     
+            }
+            else{
+                win =  lines[i+3];
+                place=   lines[i+4];
+                i=i+6;   
+            }
+
+            for(var j=1; j <= 20 ; j++)
+            {
+
+                if(j== parseInt(dong)) 
+                {   
+                    winAmt =   win; 
+                    winAmt = winAmt.replace("$","");
+                    winAmt = winAmt.replace("\t","");
+                    winAmt = winAmt.replace(".00","");
+                    winAmt = winAmt.replace(",","");
+                    winAmt_inter = parseInt(winAmt);
+                    if(winAmt > 1000)
+                        winAmt = 999;
+                    var placeAmt = place; 
+                    placeAmt = placeAmt.replace("$","");
+                    placeAmt = placeAmt.replace("\t","");
+                    placeAmt = placeAmt.replace(".00","");
+                    placeAmt = placeAmt.replace(",","");
+                    placeAmt_inter = parseInt(placeAmt);
+                    if(placeAmt > 1000)
+                        placeAmt = 999;
+
+                    var sNo = j-1;
+
+                    $("#tbGetToteSIN tbody tr:eq(0) td:eq("+sNo+") input").val(winAmt);
+                    $("#tbGetToteSIN tbody tr:eq(1) td:eq("+sNo+") input").val(placeAmt);
+                }             
+            }
+
+
+        }
+    }
+    //  for(var i=0; i < soDong ; i++)
+    //    {                
+    //  var cols = dong.split('\t');
+    //       var dong = lines[i];  
+    // console.log(i);
+    //       console.log(dong);  
+    // for(var j=0; j<soDong ; j++)
+    //         {
+    //              var dong = lines[j];  
+    //              if(i== parseInt(dong))
+    //              {
+    //                 console.log(i);
+    //                 console.log(dong);  
+    // break;
+    //              }
+    //         }
+    //         
+    // console.log(i);
+    //  console.log(dong);
+    //  console.log(cols);
+
+    //  if(cols.length > 2)
+    //        {  
+    //            var s_stt = cols[0];
+    //            var stt = parseInt(s_stt);
+    //            if($.isNumeric(stt))
+    //            {
+    //                if(stt>0 && stt<21)
+    //                {
+    //                    var horseName = cols[1];
+    //                    var winAmt = cols[cols.length-2];
+    //                    winAmt = winAmt.replace("$","");
+    //                    winAmt = winAmt.replace("\t","");
+    //                    winAmt = winAmt.replace(".00","");
+    //                    winAmt = winAmt.replace(",","");
+    //                    winAmt_inter = parseInt(winAmt);
+    //                    if(winAmt > 1000)
+    //                        winAmt = 999;
+    //                    var placeAmt = cols[cols.length-1]; 
+    //                    placeAmt = placeAmt.replace("$","");
+    //                    placeAmt = placeAmt.replace("\t","");
+    //                    placeAmt = placeAmt.replace(".00","");
+    //                    placeAmt = placeAmt.replace(",","");
+    //                    placeAmt_inter = parseInt(placeAmt);
+    //                    if(placeAmt > 1000)
+    //                        placeAmt = 999;
+
+    //                    var sNo = stt -1;
+
+    //                    $("#tbGetToteSIN tbody tr:eq(0) td:eq("+sNo+") input").val(winAmt);
+    //                    $("#tbGetToteSIN tbody tr:eq(1) td:eq("+sNo+") input").val(placeAmt);
+    //                }
+    //            }       
+    //        }   
+    //    }
     //SaveLiveToSinDabase();
     SaveToteSin();
     $('#ContentConvert').val(" ");
@@ -1168,7 +1292,7 @@ function ConvertMaltele_Chrome()
         var cols = dong.split('\t'); 
         if(cols.length > 2)
         {     
-           
+
             var s_stt = cols[0];
             var stt = parseInt(s_stt);
             if($.isNumeric(stt))
@@ -1204,14 +1328,14 @@ function ConvertMaltele_FireFox()
     //var len = txt_convert.length;
     var lines = txtConvert.split('\n');
     var soDong = lines.length; 
-   
+
     for(var i=13; i<soDong ; i ++)
     {
         var dong = lines[i];
-      
-          
+
+
         var cols = dong.split('\t');    
-      
+
         if(cols.length > 2)
         {  
             var s_stt = cols[0];              

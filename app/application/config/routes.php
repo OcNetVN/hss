@@ -271,6 +271,7 @@
     $route['app/soccer/numberdetail']               =        "app/home_controller/numberdetail";
     $route['app/soccer/live_score']                      =        "app/home_controller/live_score";
     $route['app/soccer/result']                       =        "app/home_controller/result_soccer";
+    $route['app/soccer/newresult']                       =        "app/home_controller/new_result_soccer";
     $route['app/soccer/ladbrokes_score']           =        "app/home_controller/ladbroke_soccer";
     $route['app/soccer/soccer_info']               =        "app/home_controller/soccer_info";
     $route['app/live_score_IFRAME']                   =        "app/home_controller/Live_Score_Iframe";

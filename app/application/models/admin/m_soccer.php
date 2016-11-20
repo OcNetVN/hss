@@ -462,4 +462,27 @@ class M_soccer extends CI_Model
         $sql_del = "DELETE FROM $name_table WHERE `txtday`='$txtday'";
         $this->db->query($sql_del);
     }
+     public function SaveFileHtmlResultNew()
+    {
+        $data = $_POST['save_today'];
+        $lang = "";
+         if(isset($_POST['lang']))
+             $lang = $_POST['lang'];
+       
+        if (!file_exists('assets/html/'.$lang.'/')) 
+        {        
+            mkdir('assets/html/'.$lang.'/', 0755, true);
+        }
+
+        $copyname =  'assets/html/'.$lang.'/result_soccer_new.html';   
+
+        $handle = fopen($copyname , 'w+');  
+        if($handle)
+        {
+            if(fwrite($handle, $data ))
+                echo "ok";
+        }
+            fclose($handle);
+    }
+
 }

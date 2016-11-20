@@ -269,6 +269,13 @@ class Home_controller extends CI_Controller {
         $req = $this->m_soccer->SaveLadbrokeFileHtml();
         echo json_encode($req);
     }
+    
+     public function SaveFileHtmlResultNew()
+        {
+            $req = $this->m_soccer->SaveFileHtmlResultNew();
+            echo json_encode($req);
+        }
+
     // race info 
     public function loadlistRaceCard(){
         $req = $this->m_racing_board->loadlistRaceCard();

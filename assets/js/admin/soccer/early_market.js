@@ -42,13 +42,13 @@ function ConvertEarlyMarket()
     var weeken   = isWeekend(arr_date);
     var outdate = "Update "+ hours+":"+minute + " " + day + "/" + month + " " + weeken;
 
-	str = str   + '<table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;position:fixed; top:30;height:35px;z-index: 1;"><tr><td>';
+	str = str   + '<table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;position:fixed; top:30;height:35px;"><tr><td>';
 	str = str   + outdate;
 	str = str   + '</td></tr></table>';
 
-	str = str 	+ '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;z-index: 1;">';
+	str = str 	+ '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;">';
 	str = str 	+ '<tr><td style="padding-bottom:40px;padding-top:30px;overflow-y: scroll;">';
-	str = str   + '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;z-index: 1;">';
+	str = str   + '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;">';
 	for(var i_tbody = 0; i_tbody < list_tbody.length; i_tbody ++)
 	{
 		var cur_body  = $(list_tbody[i_tbody]);
@@ -57,7 +57,7 @@ function ConvertEarlyMarket()
 		if(n_td==1)
 		{
 			_dataevent = $(list_td[0]).children("span").children("span").eq(0).text();
-			str = str + '<tr  style="background-color:#222222;height:35px;">';
+			str = str + '<tr  style="background-color:#222222;height:28px;">';
 			str = str + '<td colspan="6" style="color:#FFF"><b>';
 			str = str + _dataevent;
 			str = str + '</b></td>';
@@ -83,7 +83,7 @@ function ConvertEarlyMarket()
 				var time_1 = _time.substring(0,5);
 				var time_2 = _time.substring(5);
 
-				str = str + '<tr bgcolor=\"white\" style="height:25px;border-bottom:1pt solid black;border-top: 1pt solid black">';
+				str = str + '<tr bgcolor=\"#AAAAAA\" style="height:25px;">';
 				str = str + '<td colspan="1" style=\"color:back;\"><b>';
 				str = str + time_1;
 				str = str + '</b><br><b>'+ time_2 +'</b></td>';
@@ -99,11 +99,10 @@ function ConvertEarlyMarket()
 				str = str + '</td>';
 				str = str + '</tr>';
 
-				//var _hdp1 	= $(list_td[3]).children("span").first().text();
-                var _hdp1   = (typeof(ChangeHDP($(list_td[3]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[3]).children("span").first().text()): "" ;
+				var _hdp1 	= $(list_td[3]).children("span").first().text();
 				var _home1	= $(list_td[4]).children("a").children("span").children("span").text();
 				var _away1	= $(list_td[5]).children("a").children("span").children("span").text();
-				var _goal1	= (typeof(ChangeHDP($(list_td[6]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[6]).children("span").first().text()): "" ; 
+				var _goal1	= $(list_td[6]).children("span").first().text();
 				var _Over1	= $(list_td[7]).children("a").children("span").children("span").text();
 				var _under1	= $(list_td[8]).children("a").children("span").children("span").text();
 
@@ -117,11 +116,10 @@ function ConvertEarlyMarket()
 				list1[i1] = json_1;
 				i1++;
 
-				//var _hdp2   = $(list_td[9]).children("span").first().text();
-                var _hdp2   = (typeof(ChangeHDP($(list_td[9]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[9]).children("span").first().text()): "" ;
+				var _hdp2   = $(list_td[9]).children("span").first().text();
 				var _home2  = $(list_td[10]).children("a").children("span").children("span").text();
 				var _away2  = $(list_td[11]).children("a").children("span").children("span").text();
-				var _goal2  = (typeof(ChangeHDP($(list_td[12]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[12]).children("span").first().text()): "" ; 
+				var _goal2  = $(list_td[12]).children("span").first().text();
 				var _Over2  = $(list_td[13]).children("a").children("span").children("span").text();
 				var _under2 = $(list_td[14]).children("a").children("span").children("span").text();
 
@@ -267,11 +265,10 @@ function ConvertEarlyMarket()
 				if(i1>0)
 				{
 					/////
-					//var _hdp1 	= $(list_td[3]).children("span").first().text();
-                    var _hdp1   = (typeof(ChangeHDP($(list_td[3]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[3]).children("span").first().text()): "" ;
+					var _hdp1 	= $(list_td[3]).children("span").first().text();
 					var _home1	= $(list_td[4]).children("a").children("span").children("span").text();
 					var _away1	= $(list_td[5]).children("a").children("span").children("span").text();
-					var _goal1	= (typeof(ChangeHDP($(list_td[6]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[6]).children("span").first().text()): "" ; 
+					var _goal1	= $(list_td[6]).children("span").first().text();
 					var _Over1	= $(list_td[7]).children("a").children("span").children("span").text();
 					var _under1	= $(list_td[8]).children("a").children("span").children("span").text();
 
@@ -289,11 +286,10 @@ function ConvertEarlyMarket()
 
 				if(i2>0)
 				{
-					//var _hdp2   = $(list_td[9]).children("span").first().text();
-                    var _hdp2   = (typeof(ChangeHDP($(list_td[9]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[9]).children("span").first().text()): "" ;
+					var _hdp2   = $(list_td[9]).children("span").first().text();
 					var _home2  = $(list_td[10]).children("a").children("span").children("span").text();
 					var _away2  = $(list_td[11]).children("a").children("span").children("span").text();
-					var _goal2  = (typeof(ChangeHDP($(list_td[12]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[12]).children("span").first().text()): "" ; 
+					var _goal2  = $(list_td[12]).children("span").first().text();
 					var _Over2  = $(list_td[13]).children("a").children("span").children("span").text();
 					var _under2 = $(list_td[14]).children("a").children("span").children("span").text();
 
@@ -490,13 +486,13 @@ function ConvertEarlyMarketCN()
     var arr_date = d.getFullYear() + "-" + month + "-" + day;
     var weeken   = isWeekendCn(arr_date);
     var outdate = "更新 "+ hours+":"+minute + " " + day + "/" + month + " " + weeken;
-	str = str   + '<table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;position:fixed; top:30;height:35px;z-index: 1;"><tr><td>';
+	str = str   + '<table width="100%" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;position:fixed; top:30;height:35px;"><tr><td>';
 	str = str   + outdate;
 	str = str   + '</td></tr></table>';
 
-	str = str 	+ '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;z-index: 1;">';
+	str = str 	+ '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;">';
 	str = str 	+ '<tr><td style="padding-bottom:40px;padding-top:30px;overflow-y: scroll;">';
-	str = str   + '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;z-index: 1;">';
+	str = str   + '<table width="100%" cellspacing="0" cellpadding="0"  style="border-style:solid; border-width:1px;">';
 	for(var i_tbody = 0; i_tbody < list_tbody.length; i_tbody ++)
 	{
 		var cur_body  = $(list_tbody[i_tbody]);
@@ -505,7 +501,7 @@ function ConvertEarlyMarketCN()
 		if(n_td==1)
 		{
 			_dataevent = $(list_td[0]).children("span").children("span").eq(0).text();
-			str = str + '<tr  style="background-color:#222222;height:35px;">';
+			str = str + '<tr  style="background-color:#222222;height:28px;">';
 			str = str + '<td colspan="6" style="color:#FFF"><b>';
 			str = str + _dataevent;
 			str = str + '</b></td>';
@@ -531,7 +527,7 @@ function ConvertEarlyMarketCN()
 				var time_1 = _time.substring(0,5);
 				var time_2 = _time.substring(5);
 
-				str = str + '<tr bgcolor=\"white\" style="height:25px;border-bottom:1pt solid black;border-top: 1pt solid black">';
+				str = str + '<tr bgcolor=\"#AAAAAA\" style="height:25px;">';
 				str = str + '<td colspan="1" style=\"color:back;\"><b>';
 				str = str + time_1;
 				str = str + '</b><br><b>'+ time_2 +'</b></td>';
@@ -547,11 +543,10 @@ function ConvertEarlyMarketCN()
 				str = str + '</td>';
 				str = str + '</tr>';
 
-				//var _hdp1 	= $(list_td[3]).children("span").first().text();
-                var _hdp1   = (typeof(ChangeHDP($(list_td[3]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[3]).children("span").first().text()): "" ;
+				var _hdp1 	= $(list_td[3]).children("span").first().text();
 				var _home1	= $(list_td[4]).children("a").children("span").children("span").text();
 				var _away1	= $(list_td[5]).children("a").children("span").children("span").text();
-				var _goal1	= (typeof(ChangeHDP($(list_td[6]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[6]).children("span").first().text()): "" ; 
+				var _goal1	= $(list_td[6]).children("span").first().text();
 				var _Over1	= $(list_td[7]).children("a").children("span").children("span").text();
 				var _under1	= $(list_td[8]).children("a").children("span").children("span").text();
 
@@ -565,11 +560,10 @@ function ConvertEarlyMarketCN()
 				list1[i1] = json_1;
 				i1++;
 
-				//var _hdp2   = $(list_td[9]).children("span").first().text();
-                var _hdp2   = (typeof(ChangeHDP($(list_td[9]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[9]).children("span").first().text()): "" ;
+				var _hdp2   = $(list_td[9]).children("span").first().text();
 				var _home2  = $(list_td[10]).children("a").children("span").children("span").text();
 				var _away2  = $(list_td[11]).children("a").children("span").children("span").text();
-				var _goal2  = (typeof(ChangeHDP($(list_td[12]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[12]).children("span").first().text()): "" ; 
+				var _goal2  = $(list_td[12]).children("span").first().text();
 				var _Over2  = $(list_td[13]).children("a").children("span").children("span").text();
 				var _under2 = $(list_td[14]).children("a").children("span").children("span").text();
 
@@ -715,11 +709,10 @@ function ConvertEarlyMarketCN()
 				if(i1>0)
 				{
 					/////
-					//var _hdp1 	= $(list_td[3]).children("span").first().text();
-                    var _hdp1   = (typeof(ChangeHDP($(list_td[3]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[3]).children("span").first().text()): "" ;
+					var _hdp1 	= $(list_td[3]).children("span").first().text();
 					var _home1	= $(list_td[4]).children("a").children("span").children("span").text();
 					var _away1	= $(list_td[5]).children("a").children("span").children("span").text();
-					var _goal1	= (typeof(ChangeHDP($(list_td[6]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[6]).children("span").first().text()): "" ; 
+					var _goal1	= $(list_td[6]).children("span").first().text();
 					var _Over1	= $(list_td[7]).children("a").children("span").children("span").text();
 					var _under1	= $(list_td[8]).children("a").children("span").children("span").text();
 
@@ -737,11 +730,10 @@ function ConvertEarlyMarketCN()
 
 				if(i2>0)
 				{
-					//var _hdp2   = $(list_td[9]).children("span").first().text();
-                    var _hdp2   = (typeof(ChangeHDP($(list_td[9]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[9]).children("span").first().text()): "" ;
+					var _hdp2   = $(list_td[9]).children("span").first().text();
 					var _home2  = $(list_td[10]).children("a").children("span").children("span").text();
 					var _away2  = $(list_td[11]).children("a").children("span").children("span").text();
-					var _goal2  = (typeof(ChangeHDP($(list_td[12]).children("span").first().text())) != "undefined") ?  ChangeHDP($(list_td[12]).children("span").first().text()): "" ; 
+					var _goal2  = $(list_td[12]).children("span").first().text();
 					var _Over2  = $(list_td[13]).children("a").children("span").children("span").text();
 					var _under2 = $(list_td[14]).children("a").children("span").children("span").text();
 
@@ -915,75 +907,4 @@ function ConvertEarlyMarketCN()
 function ClearAll()
 {
 	$("#ContentConvert").val("");
-}
-function ChangeHDP(hdp)
-{      
-    var result ="";      
-    if(hdp.indexOf("-") != -1)
-    {
-        var hdc = hdp.split("-");         
-        return  result = changeOdd(hdc[0]) + "-" + changeOdd(hdc[1]);             
-    }
-    else
-    {
-        if(hdp == " "){
-             return  "aa"
-        }
-        else {
-           return  result = changeOdd(hdp);   
-        }
-        
-    }
-    
-}
-function changeOdd(Odd)
-{
-    if (Odd == " ")
-        return    "" ;
-    if (Odd == "0")
-        return    "0" ;
-    if (Odd == "0.0")
-        return    "00" ;
-    if (Odd == "0.5"|| Odd == "0.50")
-        return    "<sup>1</sup>&frasl;<sub>2</sub>" ;
-     if (Odd == "1.0" || Odd == "1")
-        return  "1" ; 
-     if (Odd == "1.5" || Odd == "1.50")
-        return    "1<sup>1</sup>&frasl;<sub>2</sub>" ; 
-     if (Odd == "2.0" || Odd == "2")
-        return  "2" ;  
-     if (Odd == "2.5" || Odd == "2.50")
-        return    "2<sup>1</sup>&frasl;<sub>2</sub>" ; 
-    if (Odd == "3.0" || Odd == "3")
-        return    "3" ; 
-    if (Odd == "3.5" || Odd == "3.50")
-        return    "3<sup>1</sup>&frasl;<sub>2</sub>" ; 
-    if (Odd == "4" || Odd == "4.0")
-        return    "4" ;
-     if (Odd == "4.5" || Odd == "4.50")
-        return    "4<sup>1</sup>&frasl;<sub>2</sub>" ; 
-    if (Odd == "5" || Odd == "5.0")
-        return    "5" ;
-     if (Odd == "5.5" || Odd == "5.50")
-        return    "5<sup>1</sup>&frasl;<sub>2</sub>" ; 
-     if (Odd == "6" || Odd == "6.0")
-        return    "6" ;
-     if (Odd == "6.5" || Odd == "6.50")
-        return    "6<sup>1</sup>&frasl;<sub>2</sub>" ;
-     if (Odd == "7" || Odd == "7.0")
-        return    "7" ;
-     if (Odd == "7.5" || Odd == "7.50")
-        return    "7<sup>1</sup>&frasl;<sub>2</sub>" ; 
-     if (Odd == "8" || Odd == "8.0")
-        return    "8" ;
-     if (Odd == "8.5" || Odd == "8.50")
-        return    "8<sup>1</sup>&frasl;<sub>2</sub>" ;
-     if (Odd == "9" || Odd == "9.0")
-        return    "9" ;
-     if (Odd == "9.5" || Odd == "9.50")
-        return    "9<sup>1</sup>&frasl;<sub>2</sub>" ;
-     if (Odd == "10" || Odd == "10.0")
-        return    "10" ;
-     if (Odd == "10.5" || Odd == "10.50")
-        return    "10<sup>1</sup>&frasl;<sub>2</sub>" ;
 }

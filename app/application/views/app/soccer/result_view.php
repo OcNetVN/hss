@@ -18,22 +18,22 @@
                       <?php 
                           if($this->lang->line(LANG_EN) == "English")
                           { // tiếng ANh ?>
-                                <a href="<?php echo base_url('/app/soccer/result'); ?>"> 
+                                <a href="<?php echo base_url('/app/soccer/newresult'); ?>"> 
                       <?php  }
                               else
                               { // Tiếng tàu ?>
-                                 <a href="<?php echo base_url('/app/soccer/result?lang=2'); ?>">
+                                 <a href="<?php echo base_url('/app/soccer/newresult?lang=2'); ?>">
                       <?php   } ?>
                         <!-- <a href="<?php //echo base_url('/app/soccer/result') ?>"> -->
-                            <input type="image"  title="Result" src="<?php echo base_url('assets/img/app/result_en.png') ?>" style="width:50px;border-width:0px;">
+                            <input type="image"  title="Result" src="<?php echo base_url('assets/img/app/result_en.png') ?>" style="width:40px;border-width:0px;">
                              <?php 
                               if($this->lang->line(LANG_EN) == "English")
                               { // tiếng ANh ?>
-                                   <span style="font-size: 10px; margin-left: -47px; position: fixed; margin-top: 48px;color: white;"><?="Result" ?></span>  
+                                   <span style="font-size: 10px; margin-left: -37px; position: fixed; margin-top: 38px;color: white;"><?="Result" ?></span>  
                                    <?php  }
                               else
                               { // Tiếng tàu ?>
-                                 <span style="font-size: 10px; margin-left: -47px; position: fixed; margin-top: 48px;color: white;"><?="成绩"?></span>
+                                 <span style="font-size: 10px; margin-left: -37px; position: fixed; margin-top: 38px;color: white;"><?="成绩"?></span>
                               <?php   } ?> 
                         </a>
                         <?php 
@@ -47,15 +47,15 @@
                                 <a href="<?php echo base_url('/app/soccer/soccer_info?lang=2'); ?>">
                         <?php  } ?>
                         
-                            <input type="image" name="" id="" title="Logout" src="<?php echo base_url('assets/img/app/scc_info.png') ?>" style="width:50px;border-width:0px;">
+                            <input type="image" name="" id="" title="Logout" src="<?php echo base_url('assets/img/app/scc_info.png') ?>" style="width:40px;border-width:0px;">
                              <?php 
                               if($this->lang->line(LANG_EN) == "English")
                               { // tiếng ANh ?>
-                                   <span style="font-size: 10px; margin-left: -47px; position: fixed; margin-top: 48px;color: white;"><?="Info" ?></span>  
+                                   <span style="font-size: 10px; margin-left: -37px; position: fixed; margin-top: 38px;color: white;"><?="Info" ?></span>  
                                    <?php  }
                               else
                               { // Tiếng tàu ?>
-                                 <span style="font-size: 10px ;margin-left: -47px; position: fixed; margin-top: 48px;color: white;"><?="信息"?></span>
+                                 <span style="font-size: 10px ;margin-left: -37px; position: fixed; margin-top: 38px;color: white;"><?="信息"?></span>
                               <?php   } ?> 
                         </a>
                          <?php 
@@ -68,15 +68,15 @@
                               { ?>
                                 <a href="<?php echo base_url('/app/soccer/alltable?lang=2'); ?>">
                         <?php  } ?>
-                            <input type="image" name="" id="" title="Table" src="<?php echo base_url('assets/img/app/table_en.png') ?>" style="width:50px;border-width:0px;">
+                            <input type="image" name="" id="" title="Table" src="<?php echo base_url('assets/img/app/table_en.png') ?>" style="width:40px;border-width:0px;">
                              <?php 
                               if($this->lang->line(LANG_EN) == "English")
                               { // tiếng ANh ?>
-                                   <span style="font-size: 10px; margin-left: -47px; position: fixed; margin-top: 48px;color: white;"><?="Next" ?></span>  
+                                   <span style="font-size: 10px; margin-left: -37px; position: fixed; margin-top: 38px;color: white;"><?="Next" ?></span>  
                                    <?php  }
                               else
                               { // Tiếng tàu ?>
-                                 <span style="font-size: 10px; margin-left: -47px; position: fixed; margin-top: 48px;color: white;"><?="下页"?></span>
+                                 <span style="font-size: 10px; margin-left: -37px; position: fixed; margin-top: 38px;color: white;"><?="下页"?></span>
                               <?php   } ?> 
                         </a>
                     </td>

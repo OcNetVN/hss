@@ -25,10 +25,21 @@ var _country = "";
 $(document).ready(function() 
 {
    //console.log($.cookie("_country"));
+    $("#txtHeader2").change(function(){    
+            var text =  $("#txtHeader2").val();
+            text = text.replace("Net Tic","网出票").replace("Et","早票 ")
+            $("#txtHeader2Man").val(text);
+        });
+       $("#txtHeader2Man").change(function(){    
+            var text =  $("#txtHeader2Man").val();
+            text = text.replace("网出票","Net Tic").replace("早票 ","Et")
+            $("#txtHeader2").val(text);
+        });
    if(typeof $.cookie("_country") != undefined || $.cookie("_country") != "")
    { 
       $('#cmbRace option[value='+ $.cookie("_country") +']').attr('selected','selected');
    }
+   
    // load category
     LoadCategory();
    // end load category
@@ -2190,11 +2201,17 @@ function SaveRaceResultDetail()
     var WinBy4 = $("#txtLength4").val();
     
     var WinMal = $("#txtWin1").val();
+    var WinMal2 = $("#txtWin2").val();
+    var WinMal3 = $("#txtWin3").val();
+    var WinMal4 = $("#txtWin4").val();
     var PlaceMal = $("#txtPlace1").val();
     var PlaceMal2 = $("#txtPlace2").val();
     var PlaceMal3 = $("#txtPlace3").val();
     var PlaceMal4 = $("#txtPlace4").val();
     var WinSin = $("#txtWin1_s").val();
+    var WinSin2 = $("#txtWin2_s").val();
+    var WinSin3 = $("#txtWin3_s").val();
+    var WinSin4 = $("#txtWin4_s").val();
     var PlaceSin = $("#txtPlace1_s").val();
     var PlaceSin2 = $("#txtPlace2_s").val();
     var PlaceSin3 = $("#txtPlace3_s").val();
@@ -2241,11 +2258,17 @@ function SaveRaceResultDetail()
                     WinBy3:WinBy3,
                     WinBy4:WinBy4,
                     WinMal:WinMal,
+                    WinMal2:WinMal2,
+                    WinMal3:WinMal3,
+                    WinMal4:WinMal4,
                     PlaceMal:PlaceMal,
                     PlaceMal2:PlaceMal2,
                     PlaceMal3:PlaceMal3,
                     PlaceMal4:PlaceMal4,
                     WinSin:WinSin,
+                    WinSin2:WinSin2,
+                    WinSin3:WinSin3,
+                    WinSin4:WinSin4,
                     PlaceSin:PlaceSin,
                     PlaceSin2:PlaceSin2,
                     PlaceSin3:PlaceSin3,

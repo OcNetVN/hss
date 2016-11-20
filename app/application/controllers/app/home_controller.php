@@ -474,7 +474,39 @@
             $this->load->view("app/soccer/footer_view");
             $this->load->view("app/footer_view");
         }
+        public function new_result_soccer()
+        {
+            $lang = "";
+            $lang_show = "";
+            if(isset($_GET['lang']))
+                $lang = $_GET['lang'];
+            else
+                $lang = 1;
 
+            if($lang == "1" || $lang == 1 || $lang == "en")
+            {
+                $this->setlang1("en");
+                $lang_show = "EN";
+            }
+            else
+            {
+                $this->setlang1("cn");
+                $lang_show = "CN";
+            }
+
+            $p_arr     =    array(
+                'title'                =>     'Soccer',
+                //'p_custom_js'       =>    $this->load->view('app/soccer/js/js_soccer_view', '', TRUE)
+            );
+
+            $res['HTMLInfo'] = $this->m_today->GetHTML("result_soccer_new.html",$lang_show);
+
+            $this->load->view("app/head_view", $p_arr);
+            //$this->load->view("app/setting/head_view");
+            $this->load->view("app/soccer/new_result_view.php",$res);
+            $this->load->view("app/soccer/footer_view");
+            $this->load->view("app/footer_view");
+        }
         public function ladbroke_soccer()
         {
             $lang_show = "";

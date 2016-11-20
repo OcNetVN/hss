@@ -539,10 +539,10 @@
                               <tr>
                                   <td><input type="text" class="form-control" placeholder="" id="txtNo2"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtLengh2"></td>
-                                  <td style="background-color: #666666">&nbsp;</td>
+                                  <td><input type="text" class="form-control" placeholder="" id="txtWin2"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtPlace2"></td>
-                                  <td  style="background-color: #5CB900;">
-                                    <!--<input type="text" class="form-control" placeholder="" id="txtWin2_s">-->
+                                  <td  style="font-size: small;text-align: right; background-color: #B5E61D;">
+                                    <input type="text" class="form-control" id="txtWin2_s">
                                   </td>
                                   <td  style="font-size: small;text-align: right; background-color: #B5E61D;">
                                     <input type="text" class="form-control" placeholder="" id="txtPlace2_s">
@@ -551,10 +551,10 @@
                               <tr>
                                   <td><input type="text" class="form-control" placeholder="" id="txtNo3"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtLengh3"></td>
-                                  <td style="background-color: #666666">&nbsp;</td>
+                                  <td><input type="text" class="form-control" placeholder="" id="txtWin3"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtPlace3"></td>
-                                  <td  style="background-color: #5CB900;">
-                                    <!--<input type="text" class="form-control" placeholder="" id="txtWin3_s">-->
+                                  <td  style="font-size: small;text-align: right; background-color: #B5E61D;">
+                                    <input type="text" class="form-control" id="txtWin3_s">
                                   </td>
                                   <td  style="font-size: small;text-align: right; background-color: #B5E61D;">
                                     <input type="text" class="form-control" placeholder="" id="txtPlace3_s">
@@ -563,10 +563,10 @@
                               <tr>
                                   <td><input type="text" class="form-control" placeholder="" id="txtNo4"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtLength4"></td>
-                                  <td style="background-color: #666666">&nbsp;</td>
+                                  <td><input type="text" class="form-control" placeholder="" id="txtWin4"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtPlace4"></td>
-                                  <td  style="background-color: #5CB900;">
-                                    <!--<input type="text" class="form-control" placeholder="" id="txtWin4_s">-->
+                                 <td  style="font-size: small;text-align: right; background-color: #B5E61D;">
+                                    <input type="text" class="form-control" id="txtWin4_s">
                                   </td>
                                   <td  style="font-size: small;text-align: right; background-color: #B5E61D;">
                                     <input type="text" class="form-control" placeholder="" id="txtPlace4_s">

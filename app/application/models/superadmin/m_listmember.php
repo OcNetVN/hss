@@ -297,7 +297,6 @@ class M_listmember extends CI_Model{
             $num_rand=rand(11890,99790);
             //$verifycode=md5(md5($num_rand));
             //$verifycode=substr($verifycode,5,5);             
-            //print_r($verifycode);
             $sql="UPDATE `users` SET `verifyCode` = '$num_rand' WHERE `rowid` = $id";
             $query=$this->db->query($sql);
             return 1;

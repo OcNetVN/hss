@@ -124,7 +124,7 @@
                               <tr>
                                   <td><input type="text" class="form-control" placeholder="" id="txtNo4"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtLength4"></td>
-                                  <td><input type="text" class="form-control" placeholder="" id="txtWin1"></td>
+                                  <td><input type="text" class="form-control" placeholder="" id="txtWin4"></td>
                                   <td><input type="text" class="form-control" placeholder="" id="txtPlace4"></td>
                                   <td  style="background-color: #B5E61D;">
                                     <input type="text" class="form-control" placeholder="" id="txtWin4_s">

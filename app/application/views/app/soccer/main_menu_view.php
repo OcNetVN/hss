@@ -11,7 +11,7 @@
                         </div>
                     </td>
                     <td  align="right">
-                        <a href="<?php echo base_url('/app/soccer/result') ?>">
+                        <a href="<?php echo base_url('/app/soccer/newresult') ?>">
                             <input type="image" name="" id="" title="Result" src="<?php echo base_url('assets/img/app/result_en.png') ?>" style="height:50px;width:50px;border-width:0px;">
                         </a>
                         <a href="<?php echo base_url('/app/soccer/alltable') ?>">
