@@ -1,0 +1,819 @@
+$(document).ready(function() {
+    //$("#btnsaveall" ).hide();
+    
+    var txtdate	=	$("#txtdate").val();
+	get_data_by_txtdate(txtdate);
+    
+    /*get value date for textbox*/
+    get_value_date();
+    
+    $( "#btnclearall" ).bind("click",function(){
+        btnclearall();
+    });
+    
+    $( "#btndrawdate" ).bind("click",function(){
+        btndrawdate();
+    });
+    
+    $( "#btnonethreed" ).bind("click",function(){
+        btnonethreed();
+    });
+    $( "#btnthreed" ).bind("click",function(){
+        btnthreed();
+    });
+    $( "#btnrm" ).bind("click",function(){
+        btnrm();
+    });
+    
+    
+    $( "#btnonethreedjp1" ).bind("click",function(){
+        btnonethreedjp1();
+    });
+    $( "#btnonethreeedjp2" ).bind("click",function(){
+        btnonethreeedjp2();
+    });
+    
+    $( "#btn3djp" ).bind("click",function(){
+        btn3djp();
+    });
+    
+    $( "#btndmcjp1" ).bind("click",function(){
+        btndmcjp1();
+    });
+    $( "#btndmcjp2" ).bind("click",function(){
+        btndmcjp2();
+    });
+        
+    $("#btnsaveall" ).bind("click",function(){
+        btnsaveall_damacai();
+    });
+    //editable
+    $.fn.editable.defaults.mode = 'popup'; 
+});
+/*
+|----------------------------------------------------------------
+|function get value date for textbox
+|----------------------------------------------------------------
+*/
+function get_value_date()
+{
+    var d       = new Date();
+    var month   = d.getMonth()+1;
+    var day     = d.getDate();
+    var strdate = (day<10 ? '0' : '') + day + '-' + (month<10 ? '0' : '') + month + '-' + d.getFullYear();
+    
+    $("#txtdate").val(strdate);
+}
+function get_data_by_txtdate(txtdate)
+{
+    $( "#divshowdata" ).hide();
+    
+    var url             = window.location.href;     // Returns full URL
+    var arr_url         =   url.split("/");
+    var para_url        =   arr_url[(arr_url.length-1)];
+    
+    if(para_url         ==  "wes_dm")
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/get_data_by_txtdate_damacai",
+                dataType:"text",
+                data: {
+                        txtdate         :   txtdate
+                },
+                cache:false,
+                success:function (data) {
+                    get_data_by_txtdate_damacai_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function get_data_by_txtdate_damacai_Complete(data)
+{
+    var sRes        = JSON.parse(data);
+    if(sRes.flag    == 1)
+    {
+        var txtdate	=	$("#txtdate").val();
+        txtdate     = txtdate.split("-");
+        var day     = txtdate[0];
+        var month   = txtdate[1];
+        var year    = txtdate[2];
+        var date    = txtdate[0] + "/" + txtdate[1] + "/" + txtdate[2];
+        $("#span_date" ).html(date);
+        $("#spandrawno" ).html(sRes.arr_res["Draw_No"]);
+        
+        $( "#span_1st_1_3d" ).html(sRes.arr_res["1_3D_1st_Price"]);
+        $( "#span_2nd_1_3d" ).html(sRes.arr_res["1_3D_2nd_Price"]);
+        $( "#span_3rd_1_3d" ).html(sRes.arr_res["1_3D_3rd_Price"]);
+        
+        var str_specical        = "";
+        var arr_sp              =   sRes.arr_res["Special"].split("|");
+        for(var i = 0; i < 10; i ++)
+        {
+            if((i+1)%5 == 1)
+                str_specical    += "<tr>";
+                    str_specical    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;\" width=\"20%\" height=\"36\" align=\"center\" valign=\"middle\" bgcolor=\"#666666\"><span id=\"spanspecial_"+ i +"\">" + arr_sp[i] + "</span></td>";
+            if((i+1)%5 == 0)
+                str_specical    += "</tr>";
+        }
+        str_specical    += "</tr>";
+        $("#tbody_special").html(str_specical);
+        
+        var str_consolation         = "";
+        var arr_con                 =   sRes.arr_res["Consolation"].split("|");
+        for(var i = 0; i < 10; i ++)
+        {
+            if((i+1)%5 == 1)
+                str_consolation    += "<tr>";
+                    str_consolation    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;\" width=\"20%\" height=\"36\" align=\"center\" valign=\"middle\" bgcolor=\"#666666\"><span id=\"spanconsolation_"+ i +"\">" + arr_con[i] + "</span></td>";
+            if((i+1)%5 == 0)
+                str_consolation    += "</tr>";
+        }
+        str_consolation    += "</tr>";
+        $("#tbody_consolation").html(str_consolation);
+        
+        $("#span_1st_3d").html(sRes.arr_res["3D_1st_Price"]);
+        $("#span_2nd_3d").html(sRes.arr_res["3D_2nd_Price"]);
+        $("#span_3rd_3d").html(sRes.arr_res["3D_3rd_Price"]);
+        
+        $("#span_rm_13djp1").html(sRes.arr_res["1_3DJp1_RM"]);
+        $("#span_rm_13djp2").html(sRes.arr_res["1_3DJp2_RM"]);
+        $("#span_rm_3djp").html(sRes.arr_res["3D_Jp_RM"]);
+        
+        $("#span_rm_dmcjp1").html(sRes.arr_res["DMC_Jp1_RM"]);
+        $("#span_rm_dmcjp2").html(sRes.arr_res["DMC_Jp2_RM"]);
+        
+        var str_jp1_13          = "";
+        var arr_1_3djp1         =   sRes.arr_res["1_3DJp1"].split("|");
+        for(var i = 0; i < 6; i ++)
+        {
+            if((i+1)%2 == 1)
+                str_jp1_13    += "<tr>";
+                    str_jp1_13    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;border-top: 1px black solid;\" width=\"50%\" height=\"30\" align=\"center\"><span id=\"spanjp1_13_"+ i +"\">" + arr_1_3djp1[i] + "</span></td>";
+            if((i+1)%2 == 0)
+                str_jp1_13    += "</tr>";
+        }
+        str_jp1_13    += "</tr>";
+        $( "#tbody_jackpotonethreed" ).html(str_jp1_13);
+        $( "span[id*='spanjp1_13_']" ).editable();
+        
+        var str_jp1_23        = "";
+        var arr_1_3djp2         =   sRes.arr_res["1_3DJp2"].split("|");
+        for(var i = 0; i < 60; i ++)
+        {
+            if((i+1)%2 == 1)
+                str_jp1_23    += "<tr>";
+                    str_jp1_23    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;border-top: 1px black solid;\" width=\"50%\" height=\"30\" align=\"center\"><span id=\"spanjp1_23_"+ i +"\">" + arr_1_3djp2[i] + "</span></td>";
+            if((i+1)%2 == 0)
+                str_jp1_23    += "</tr>";
+        }
+        str_jp1_23    += "</tr>";
+        $( "#tbody_jackpottwoonethreed" ).html(str_jp1_23);
+        $( "span[id*='spanjp1_23_']" ).editable();
+        
+        var arr_3D_Jp  = sRes.arr_res["3D_Jp"].split("|");
+        var str_3DJp_res  = "";
+        var j=1;
+        for(var i = 0; i < arr_3D_Jp.length; i ++)
+        {
+            if(j%3 == 1)
+                        str_3DJp_res += "<tr>";
+                            str_3DJp_res += '<td style="border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;" width="33%" height="30" align="center"><span id="span3djp_'+i+'">'+arr_3D_Jp[i]+'</span></td>';
+            if(j%3 == 0)
+                        str_3DJp_res += "</tr>";
+                    j++;
+            if(j > 6)
+                        break;
+        }
+       $( "#tbody_jackpotthreed" ).html(str_3DJp_res);
+       $( "span[id*='span3djp_']" ).editable();
+
+        var str_res = "";
+        str_res += "<tr>";
+            str_res += '<td style="border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;" height="30" align="center"><span id="dmcjp1">' + sRes.arr_res["DMC_Jp1"] + '</span></td>';
+        str_res += "</tr>";
+        $( "#tbody_dmcjpone" ).html(str_res);
+        $( "#dmcjp1" ).editable();
+        
+        var str_jp1_23        = "";
+        var arr_DMC_Jp2         =   sRes.arr_res["DMC_Jp2"].split("|");
+        for(var i = 0; i < 5; i ++)
+        {
+            str_jp1_23    += "<tr><td style=\"border-left: 1px black solid;border-bottom: 1px black solid;border-top: 1px black solid;\" width=\"100%\" height=\"30\" align=\"center\"><span id=\"dmcjp2_"+ i +"\">" + arr_DMC_Jp2[i] + "</span></td></tr>";
+        }
+        $( "#tbody_dmcjptwo" ).html(str_jp1_23);
+        $( "span[id*='dmcjp2_']" ).editable();
+        
+        //editable
+        $("#span_date").editable();
+        $("#spandrawno").editable();
+        $("[id*=span_]" ).editable();
+        $("[id*=spanspecial_]" ).editable();
+        $("[id*=spanconsolation_]" ).editable();
+        
+        $( "#divshowdata" ).show();
+        $( "#btnsaveall" ).show();
+    }
+    else
+    {
+        $( "#divshowdata" ).hide();
+        //$( "#btnsaveall" ).hide();
+    }
+}
+
+function hidenotify()
+{
+    $( "#notifyerr" ).hide();
+    $( "#notifysuccess" ).hide();
+    $( "#notifycontent" ).hide();
+}
+/*
+|----------------------------------------------------------------
+| function clear all
+|----------------------------------------------------------------
+*/
+function btnclearall()
+{
+    // $( "span[id*='span']" ).html("");
+    // $( "span[id*='dmcjp']" ).html("");
+    $("#ContentConvert").val("");
+    //$( "span[id*='span']" ).editable(); 
+}
+/*
+|----------------------------------------------------------------
+| function convert drawdate
+|----------------------------------------------------------------
+*/
+function btndrawdate()
+{
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btndrawdate",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btndrawdate_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btndrawdate_Complete(data){
+    var sRes    = JSON.parse(data);
+    $( "#span_date" ).html(sRes.date);
+    $( "#spandrawno" ).html(sRes.drawno);
+    
+    //editable
+    $("#span_date").editable();
+    $("#spandrawno").editable();
+    
+    $( "#divshowdata" ).show();
+}
+
+/*
+|----------------------------------------------------------------
+| function convert 1+3D convert
+|----------------------------------------------------------------
+*/
+function btnonethreed()
+{
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btnonethreed",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btnonethreed_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btnonethreed_Complete(data){
+    var sRes    = JSON.parse(data);
+    $( "#span_1st_1_3d" ).html(sRes.Price_1_3D_1st);
+    $( "#span_2nd_1_3d" ).html(sRes.Price_1_3D_2nd);
+    $( "#span_3rd_1_3d" ).html(sRes.Price_1_3D_3rd);
+    
+    var str_specical        = "";
+    for(var i = 0; i < 10; i ++)
+    {
+        if((i+1)%5 == 1)
+            str_specical    += "<tr>";
+                str_specical    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;\" width=\"20%\" height=\"36\" align=\"center\" valign=\"middle\" bgcolor=\"#666666\"><span id=\"spanspecial_"+ i +"\">" + sRes.arr_special[i] + "</span></td>";
+        if((i+1)%5 == 0)
+            str_specical    += "</tr>";
+    }
+    str_specical    += "</tr>";
+    $("#tbody_special").html(str_specical);
+    
+    var str_consolation        = "";
+    for(var i = 0; i < 10; i ++)
+    {
+        if((i+1)%5 == 1)
+            str_consolation    += "<tr>";
+                str_consolation    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;\" width=\"20%\" height=\"36\" align=\"center\" valign=\"middle\" bgcolor=\"#666666\"><span id=\"spanconsolation_"+ i +"\">" + sRes.arr_consolation[i] + "</span></td>";
+        if((i+1)%5 == 0)
+            str_consolation    += "</tr>";
+    }
+    str_consolation    += "</tr>";
+    $("#tbody_consolation").html(str_consolation);
+    
+    //editable
+    $("#span_1st_1_3d").editable();
+    $("#span_2nd_1_3d").editable();
+    $("#span_3rd_1_3d").editable();
+    
+    $( "span[id*='spanspecial_']" ).editable();
+    $( "span[id*='spanconsolation_']" ).editable();
+    
+    $( "#divshowdata" ).show();
+}
+/*
+|----------------------------------------------------------------
+| function convert 3D convert
+|----------------------------------------------------------------
+*/
+function btnthreed()
+{
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btnthreed",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btnthreed_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btnthreed_Complete(data){
+    var sRes    = JSON.parse(data);
+    $( "#span_1st_3d" ).html(sRes.Price_3D_1st);
+    $( "#span_2nd_3d" ).html(sRes.Price_3D_2nd);
+    $( "#span_3rd_3d" ).html(sRes.Price_3D_3rd);
+    
+    //editable
+    $("#span_1st_3d").editable();
+    $("#span_2nd_3d").editable();
+    $("#span_3rd_3d").editable();
+    
+    $( "#divshowdata" ).show();
+}
+
+
+
+/*
+|----------------------------------------------------------------
+| function convert RM
+|----------------------------------------------------------------
+*/
+function btnrm(){    
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btnrm",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btnrm_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btnrm_Complete(data){
+    var sRes    = JSON.parse(data);
+    $( "#span_rm_13djp1" ).html(sRes.jp1_1_3d);
+    $( "#span_rm_13djp2" ).html(sRes.jp2_1_3d);
+    $( "#span_rm_3djp" ).html(sRes.jp_3d);
+    $( "#span_rm_dmcjp1" ).html(sRes.jp1_dmc);
+    $( "#span_rm_dmcjp2" ).html(sRes.jp2_dmc);
+    
+    //editable
+    $("#span_rm_13djp1").editable();
+    $("#span_rm_13djp2").editable();
+    $("#span_rm_3djp").editable();
+    $("#span_rm_dmcjp1").editable();
+    $("#span_rm_dmcjp2").editable();
+    
+    $( "#divshowdata" ).show();
+}
+
+
+
+/*
+|----------------------------------------------------------------
+| function convert 1+3D jackport 1 convert
+|----------------------------------------------------------------
+*/
+function btnonethreedjp1(){    
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btnonethreedjp1",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btnonethreedjp1_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btnonethreedjp1_Complete(data){
+    var sRes    = JSON.parse(data);
+    var str_jp1_13        = "";
+    for(var i = 0; i < 6; i ++)
+    {
+        if((i+1)%2 == 1)
+            str_jp1_13    += "<tr>";
+                str_jp1_13    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;border-top: 1px black solid;\" width=\"50%\" height=\"30\" align=\"center\"><span id=\"spanjp1_13_"+ i +"\">" + sRes.arr_res[i] + "</span></td>";
+        if((i+1)%2 == 0)
+            str_jp1_13    += "</tr>";
+    }
+    str_jp1_13    += "</tr>";
+    $( "#tbody_jackpotonethreed" ).html(str_jp1_13);
+    
+    $( "span[id*='spanjp1_13_']" ).editable();
+    
+    $( "#divshowdata" ).show();
+}
+/*
+|----------------------------------------------------------------
+| function convert 1+3D jackport 2 convert
+|----------------------------------------------------------------
+*/
+function btnonethreeedjp2()
+{    
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btnonethreeedjp2",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btnonethreeedjp2_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btnonethreeedjp2_Complete(data)
+{
+    var sRes    = JSON.parse(data);
+    var str_jp1_23        = "";
+    for(var i = 0; i < 60; i ++)
+    {
+        if((i+1)%2 == 1)
+            str_jp1_23    += "<tr>";
+                str_jp1_23    += "<td style=\"border-left: 1px black solid;border-bottom: 1px black solid;border-top: 1px black solid;\" width=\"50%\" height=\"30\" align=\"center\"><span id=\"spanjp1_23_"+ i +"\">" + sRes.arr_res[i] + "</span></td>";
+        if((i+1)%2 == 0)
+            str_jp1_23    += "</tr>";
+    }
+    str_jp1_23    += "</tr>";
+    $( "#tbody_jackpottwoonethreed" ).html(str_jp1_23);
+    
+    $( "span[id*='spanjp1_23_']" ).editable();
+    
+    $( "#divshowdata" ).show();
+}
+
+/*
+|----------------------------------------------------------------
+| function convert 3D jackport convert
+|----------------------------------------------------------------
+*/
+function btn3djp(){    
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btn3djp",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btn3djp_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btn3djp_Complete(data){
+    var sRes    = JSON.parse(data);
+    var str_3DJp_res     = "";
+    var _3djp = sRes.arr_res;
+    var j=1;
+    for(var i = 0; i < _3djp.length; i ++)
+    {
+        if(j%3 == 1)
+                    str_3DJp_res += "<tr>";
+                        str_3DJp_res += '<td style="border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;" width="33%" height="30" align="center"><span id="span3djp_'+i+'">'+_3djp[i]+'</span></td>';
+        if(j%3 == 0)
+                    str_3DJp_res += "</tr>";
+                j++;
+        if(j > 6)
+                    break;
+    }
+    $( "#tbody_jackpotthreed" ).html(str_3DJp_res);
+    $( "span[id*='span3djp_']" ).editable();
+    
+    $( "#divshowdata" ).show();
+}
+/*
+|----------------------------------------------------------------
+| function convert DMC jackport 1 convert
+|----------------------------------------------------------------
+*/
+function btndmcjp1(){    
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btndmcjp1",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btndmcjp1_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btndmcjp1_Complete(data){
+    var sRes    = JSON.parse(data);
+    var str_res = "";
+    str_res += "<tr>";
+        str_res += '<td style="border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;" height="30" align="center"><span id="dmcjp1">' + sRes.str_convert + '</span></td>';
+    str_res += "</tr>";
+    $( "#tbody_dmcjpone" ).html(str_res);
+    
+    $( "#dmcjp1" ).editable();
+    
+    $( "#divshowdata" ).show();
+}
+/*
+|----------------------------------------------------------------
+| function convert DMC jackport 2 convert
+|----------------------------------------------------------------
+*/
+function btndmcjp2(){    
+    hidenotify();
+    
+    var ContentConvert = $( "#ContentConvert" ).val();
+    if(ContentConvert == null || ContentConvert == "")
+    {
+        $( "#notifycontent" ).show();
+    }
+    else
+    {
+        $.ajax({
+                type:"POST",
+                url: "../admin/homelt_controller/btndmcjp2",
+                dataType:"text",
+                data: {ContentConvert: ContentConvert},
+                cache:false,
+                success:function (data) {
+                    btndmcjp2_Complete(data);
+                },
+                error: function () { alert("Error!");}
+       });
+    }
+}
+function btndmcjp2_Complete(data){
+    var sRes    = JSON.parse(data);
+    
+    var str_jp1_23        = "";
+    for(var i = 0; i < 5; i ++)
+    {
+        str_jp1_23    += "<tr><td style=\"border-left: 1px black solid;border-bottom: 1px black solid;border-top: 1px black solid;\" width=\"100%\" height=\"30\" align=\"center\"><span id=\"dmcjp2_"+ i +"\">" + sRes.arr_res[i] + "</span></td></tr>";
+    }
+    $( "#tbody_dmcjptwo" ).html(str_jp1_23);
+    
+    $( "span[id*='dmcjp2_']" ).editable();
+    
+    $( "#divshowdata" ).show();
+    $( "#btnsaveall" ).show();
+}
+
+/*
+|----------------------------------------------------------------
+| function save all after convert and edit infomation
+|----------------------------------------------------------------
+*/
+function btnsaveall_damacai()
+{
+    var span_date                       =   $( "#span_date" ).html();
+    var spandrawno                      =   $( "#spandrawno" ).html();
+    var span_1st_1_3d                   =   $( "#span_1st_1_3d" ).html();
+    var span_2nd_1_3d                   =   $( "#span_2nd_1_3d" ).html();
+    var span_3rd_1_3d                   =   $( "#span_3rd_1_3d" ).html();
+    
+    var arr_special                     = [];
+    for(var i   = 0; i  < 10; i ++)
+    {
+        var elementspecial              =   $( "#spanspecial_" + i ).html();
+        arr_special.push(elementspecial);
+    }
+    
+    var arr_consolation                 = [];
+    for(var i   = 0; i  < 10; i ++)
+    {
+        var elementconsolation          =   $( "#spanconsolation_" + i ).html();
+        arr_consolation.push(elementconsolation);
+    }
+    
+    var span_1st_3d                     =   $( "#span_1st_3d" ).html();
+    var span_2nd_3d                     =   $( "#span_2nd_3d" ).html();
+    var span_3rd_3d                     =   $( "#span_3rd_3d" ).html();
+    
+    var span_rm_13djp1                  =   $( "#span_rm_13djp1" ).html();
+    var span_rm_13djp2                  =   $( "#span_rm_13djp2" ).html();
+    var span_rm_3djp                    =   $( "#span_rm_3djp" ).html();
+    var span_rm_dmcjp1                  =   $( "#span_rm_dmcjp1" ).html();
+    var span_rm_dmcjp2                  =   $( "#span_rm_dmcjp2" ).html();
+    
+    
+    var arr_jp1_13                      = [];
+    for(var i   = 0; i  < 6; i ++)
+    {
+        var elementjp1_13               =   $( "#spanjp1_13_" + i ).html();
+        arr_jp1_13.push(elementjp1_13);
+    }
+    
+    var arr_jp1_23                      = [];
+    for(var i   = 0; i  < 60; i ++)
+    {
+        var elementjp1_23               =   $( "#spanjp1_23_" + i ).html();
+        arr_jp1_23.push(elementjp1_23);
+    }
+    
+    var arr_3djp                      = [];
+    for(var i   = 0; i  < 6; i ++)
+    {
+        var element3djp               =   $("#span3djp_" + i ).html();
+        arr_3djp.push(element3djp);
+    }
+    
+    var dmcjp1                          =   $( "#dmcjp1" ).html();
+    
+    var arr_dmcjp2                      = [];
+    for(var i   = 0; i  < 5; i ++)
+    {
+        var elementdmcjp2               =   $( "#dmcjp2_" + i ).html();
+        arr_dmcjp2.push(elementdmcjp2);
+    }
+
+    //var _3djp = sRes.arr_res;
+
+    var damacai = {};
+        damacai.txtdate = span_date;
+        damacai.drawno  = spandrawno;
+        damacai._1st    = span_1st_1_3d;
+        damacai._2nd    = span_2nd_1_3d;
+        damacai._3rd    = span_3rd_1_3d;
+        damacai.special = arr_special;
+        damacai.consolation = arr_consolation;
+        damacai._1st_3d = span_1st_3d;
+        damacai._2nd_3d = span_2nd_3d;
+        damacai._3rd_3d = span_3rd_3d;
+        damacai._rm_13djp1 = span_rm_13djp1;
+        damacai._rm_13djp2 = span_rm_13djp2;
+        damacai._rm_3djp   = span_rm_3djp;
+        damacai._rm_dmcjp1 = span_rm_dmcjp1;
+        damacai._rm_dmcjp2 = span_rm_dmcjp2;
+        damacai._jp1_13    = arr_jp1_13;
+        damacai._jp1_23    = arr_jp1_23;
+        damacai._3djp      = arr_3djp;
+        damacai.dmcjp1     = dmcjp1;
+        damacai._dmcjp2    = arr_dmcjp2;
+
+    $.ajax({
+            type:"POST",
+            url: "../admin/homelt_controller/btnsaveall_damacai",
+            dataType:"text",
+            data: {     span_date                   :   span_date,
+                        spandrawno                  :   spandrawno,
+                        span_1st_1_3d               :   span_1st_1_3d,
+                        span_2nd_1_3d               :   span_2nd_1_3d,
+                        span_3rd_1_3d               :   span_3rd_1_3d,
+                        
+                        arr_special                 :   arr_special,
+                        arr_consolation             :   arr_consolation,
+                        
+                        span_1st_3d                 :   span_1st_3d,
+                        span_2nd_3d                 :   span_2nd_3d,
+                        span_3rd_3d                 :   span_3rd_3d,
+                        
+                        span_rm_13djp1              :   span_rm_13djp1,
+                        span_rm_13djp2              :   span_rm_13djp2,
+                        span_rm_3djp                :   span_rm_3djp,
+                        span_rm_dmcjp1              :   span_rm_dmcjp1,
+                        span_rm_dmcjp2              :   span_rm_dmcjp2,
+                        
+                        arr_jp1_13                  :   arr_jp1_13,
+                        arr_jp1_23                  :   arr_jp1_23,
+                        arr_3djp                    :   arr_3djp,
+                        dmcjp1                      :   dmcjp1,
+                        arr_dmcjp2                  :   arr_dmcjp2
+                        },
+            cache:false,
+            success:function (data) {
+                btnsaveall_damacai_Complete(data,damacai);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function btnsaveall_damacai_Complete(data,damacai)
+{
+    var sRes    = JSON.parse(data);
+    if(sRes     == 1)
+    {
+        var res = 'LotDamacai';
+        var trans = {};
+            trans.message = 'LotDamacai';
+            trans.list    = damacai;
+        socket.emit('PageRefresh',trans);
+	       console.log(res);
+        $( "#notifysuccess" ).show();
+    }
+    else
+    {
+        $( "#notifyerr" ).show();
+    }
+}

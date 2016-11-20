@@ -1,0 +1,28 @@
+$(document).ready(function() {
+	load_tell_your_friends();
+});
+
+function load_tell_your_friends()
+{
+	$.ajax({
+            type:"POST",
+            url: "../home_controller/load_tell_your_friends",
+            dataType:"text",
+            //data: {},
+            cache:false,
+            success:function (data) {
+                load_tell_your_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+
+function load_tell_your_Complete(data)
+{
+	var sRes = JSON.parse(data);
+	$("#showtellyou").html("");
+	if(sRes.content != '' || sRes.content != '')
+	{
+		$("#showtellyou").append(sRes.content);
+	}
+}

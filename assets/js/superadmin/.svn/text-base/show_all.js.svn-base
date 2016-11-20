@@ -1,0 +1,40 @@
+$(document).ready(function() {
+    show_all_agent(1);
+});
+function show_all_agent(page)
+{
+    $("body").addClass("loading");
+    //alert("dsfds");
+    $.ajax({
+        type:"POST",
+        url:"home_controller/show_all_agent",
+        dataType:"text",
+        data: {
+                page: page                              
+                },
+        cache:false,
+        success:function (data) {
+            show_all_agent_Complete(data);
+        },
+        error: function () { alert("Error!"); $("body").removeClass("loading");}
+    });
+}
+function show_all_agent_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    if(sRes.totalrow > 0)
+    {
+        $("#notifyres").hide();
+        $("#tbodylistagent").html(sRes.str_list);
+        $("#divpagination").html(sRes.str_numpage);
+        $("#tbllistagent").show();
+    }
+    else
+    {
+        $("#tbllistagent").hide();
+        $("#notifyres").html(sRes.notfound);
+        $("#notifyres").show();
+        $("#divpagination").html("");
+    }
+    $("body").removeClass("loading");
+}

@@ -1,0 +1,214 @@
+
+$(document).ready(function() {
+    $("#sechoose" ).bind("change",function(){
+        var sechoose        =   $(this).val();
+        getevent();
+        $("#span_tb").text("");
+    });
+
+    function isNumber (o) 
+    {
+        return ! isNaN (o-0);
+    }  
+
+    //1st 2nd 3rd only can key in 4 digit number 
+    $('[id*=txtNo]').keyup(function(e){
+    txtVal = $(this).val(); 
+    txtVal = $.trim(txtVal);
+     if(isNumber(txtVal) && txtVal.length>4)
+     {
+         $(this).val(txtVal.substring(0,4))
+     }
+    });
+    //txtNo1_1
+    $('[id*=txtNo1_]').keyup(function(e){
+    txtVal = $(this).val(); 
+    txtVal = $.trim(txtVal);
+     if(isNumber(txtVal) && txtVal.length>2)
+     {
+         $(this).val(txtVal.substring(0,2))
+     }
+    });
+
+    $('[id*=txtNo2_]').keyup(function(e){
+    txtVal = $(this).val(); 
+    txtVal = $.trim(txtVal);
+     if(isNumber(txtVal) && txtVal.length>2)
+     {
+         $(this).val(txtVal.substring(0,2))
+     }
+    });
+
+    $('[id*=txtNo3_]').keyup(function(e){
+    txtVal = $(this).val(); 
+    txtVal = $.trim(txtVal);
+     if(isNumber(txtVal) && txtVal.length>2)
+     {
+         $(this).val(txtVal.substring(0,2))
+     }
+    });
+
+    $('[id*=txtNo4_]').keyup(function(e){
+    txtVal = $(this).val(); 
+    txtVal = $.trim(txtVal);
+     if(isNumber(txtVal) && txtVal.length>2)
+     {
+         $(this).val(txtVal.substring(0,2))
+     }
+    });
+});
+function SaveMyPlay()
+{
+    var lottry_type = $("#sechoose").val();
+    var No_1        = $("#txtNo1").val();
+    var No_2        = $("#txtNo2").val();
+    var No_3        = $("#txtNo3").val();
+    var No_4        = $("#txtNo4").val();
+    var No_5        = $("#txtNo5").val();
+    var txtday      = $("#txtdate").val();
+    var strNo1='';
+    var strNo2='';
+    var strNo3='';
+    var strNo4='';
+    var strNo5='';
+    for(var i=1;i<7;i++)
+    {
+       strNo1 = strNo1 + $("#txtNo1_" + i).val() + "|";
+       strNo2 = strNo2 + $("#txtNo2_" + i).val() + "|";
+       strNo3 = strNo3 + $("#txtNo3_" + i).val() + "|";
+       strNo4 = strNo4 + $("#txtNo4_" + i).val() + "|";
+       strNo5 = strNo5 + $("#txtNo5_" + i).val() + "|";
+    }
+    console.log(txtday);
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/SaveMyPlay",
+            dataType:"text",
+            data: {
+                     txtday:txtday,
+                     type:lottry_type,
+                     No1 :No_1,
+                     No2 :No_2,
+                     No3 :No_3,
+                     No4 :No_4,
+                     No5 :No_5,
+                     strNo1:strNo1,
+                     strNo2:strNo2,
+                     strNo3:strNo3,
+                     strNo4:strNo4,
+                     strNo5:strNo5    
+                   },
+            cache:false,
+            success:function (data) {
+                SaveMyPlay_Complete(data);
+            },
+            error: function () { $("#span_tb").text("Error!");}
+   });
+}
+
+function SaveMyPlay_Complete(data)
+{
+   var sRes = JSON.parse(data);
+   $("#span_tb").text("");
+   if(sRes.result == 1 || sRes.result == "1")
+   {
+        //alert("Your Play Sucess");
+        $("#span_tb").text("Save Play Number Sucess");
+        getevent();
+   }
+
+}
+
+function get_data_by_txtdate(txtday,type)
+{
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/loadlistplaynumber",
+            dataType:"text",
+            data: {
+                    txtday:txtday,
+                    type:type
+                   },
+            cache:false,
+            success:function (data) {
+                loadlistplaynumber_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+
+function loadlistplaynumber_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    if(sRes.flag == 1 || sRes.flag == "1")
+    {
+        var list = sRes.l_playnumber;
+        var No1  = list['NoFrist'];
+        $("#txtNo1").val(No1);
+        var No2  = list['NoTwo'];
+        $("#txtNo2").val(No2);
+        var No3  = list['NoThree'];
+        $("#txtNo3").val(No3);
+        var No4  = list['NoFour'];
+        $("#txtNo4").val(No4);
+        var No5  = list['NoFine'];
+        $("#txtNo4").val(No5);
+        var strNo1 = list['NoForFrist'];
+        if(strNo1.length  > 0)
+        {
+            strNo1 = strNo1.split("|");
+            for(var i=0;i<7;i++)
+            {
+                $("#txtNo1_" +(i+1)).val(strNo1[i]);
+            }
+        }
+        var strNo2 = list['NoForTwo'];
+        if(strNo2.length > 0)
+        {
+            strNo2 = strNo2.split("|");
+            for(var i=0;i<7;i++)
+            {
+                $("#txtNo2_" +(i+1)).val(strNo2[i]);
+            }
+        }
+        var strNo3 = list['NoForThree'];
+        if(strNo3.length > 0)
+        {
+           strNo3 = strNo3.split("|");
+           for(var i=0;i<7;i++)
+           {
+                $("#txtNo3_" +(i+1)).val(strNo3[i]);
+           } 
+        }
+        var strNo4 = list['NoForFour'];
+        if(strNo4.length > 0)
+        {
+            strNo4 = strNo4.split("|");
+            for(var i=0;i<7;i++)
+            {
+               $("#txtNo4_" +(i+1)).val(strNo4[i]); 
+            }
+
+        }
+        var strNo5 = list['NoForFine'];
+        if(strNo5.length > 0)
+        {
+            strNo5 = strNo5.split("|");
+            for(var i=0;i<7;i++)
+            {
+               $("#txtNo5_" +(i+1)).val(strNo5[i]); 
+            }
+
+        }
+
+    }
+    else
+    {
+        $('[id*=txtNo]').val('');
+    }
+}
+
+function ClearAll()
+{
+    $('[id*=txtNo]').val("");
+}

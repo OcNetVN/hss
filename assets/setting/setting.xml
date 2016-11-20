@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+	<RecordOnePageListAgent>10</RecordOnePageListAgent>
+	<RecordOnePageListMember>10</RecordOnePageListMember>
+	<RecordOnePageShowAll>999999999</RecordOnePageShowAll>
+	<RecordOnePageTransHistory>999999999</RecordOnePageTransHistory>
+	<RecordOnePageListSellphone>10</RecordOnePageListSellphone>
+	
+	<RecordOnePageGenStatement>999999999</RecordOnePageGenStatement>
+	<RMActiveAgentGenStatement>30</RMActiveAgentGenStatement>
+	<TimelineGenStatement>10</TimelineGenStatement> <!--10th of every month-->
+</settings>

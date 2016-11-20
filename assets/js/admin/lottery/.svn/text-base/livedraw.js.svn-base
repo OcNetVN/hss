@@ -1,0 +1,1079 @@
+
+var arr_str         =   ["--","A","B","C","D","E","F","G","H","I","J","K","L","M"];
+var curent_name_focus_out = "";
+$(document).ready(function() {
+
+    function isNumber (o) 
+    {
+        return ! isNaN (o-0);
+    }  
+
+    //1st 2nd 3rd only can key in 4 digit number 
+    $("input").keyup(function(e){
+    txtVal = $(this).val(); 
+    txtVal = $.trim(txtVal);
+     if(isNumber(txtVal) && txtVal.length>4)
+     {
+         $(this).val(txtVal.substring(0,4))
+     }
+    });
+
+    /*get value date for textbox*/
+    get_value_date();
+    
+    $("#sechoose" ).bind("change",function(){
+        var sechoose        =   $(this).val();
+        choose_function(sechoose);
+    });
+    
+    $("[id*=semagnum]" ).bind("change",function()
+    {
+        var temp = this;
+        var name = this.id;
+        console.log(name);
+        btnsavemagnum(name);
+        //var sechoose        =   $(this).val();
+        // jQuery.each( arr_str, function( i, val ) {
+        //     if(val  ==  sechoose)
+        //     {
+        //         //var vt          =   parseInt(i) + 1;
+        //         //$( "#magnum_special" + vt).val("");
+        //     }
+        // });
+    });
+
+    $("[id*=setoto]").bind("change",function()
+    {
+        var temp = this;
+        var name = this.id;
+        btnsavetoto(name);
+    });
+    
+    $( "#btnsavedmc" ).bind("click",function(){
+        //name này 
+        btnsavedmc(curent_name_focus_out);
+    });
+    
+    $( "#btnsavemagnum" ).bind("click",function(){
+        btnsavemagnum(curent_name_focus_out);
+    });
+    
+    $( "#btnsavetoto" ).bind("click",function(){
+        btnsavetoto(curent_name_focus_out);
+    });
+    
+    $("#btnsave_livedraw4d").bind("click",function(){
+        btnsavesin4d(curent_name_focus_out);
+    });
+    
+    $( "#btnresetsintoto" ).bind("click",function(){
+        btnresetsintoto();
+    });
+    
+    $(".funcClear").bind("click",function(){
+         ClearAllLiveDraw();
+    });
+    $( "#btnsavesintoto" ).bind("click",function(){
+        btnsavesintoto(curent_name_focus_out);
+    });
+    
+    //editable
+    $.fn.editable.defaults.mode = 'popup'; 
+    $("span[id*=spansintoto]").html("&nbsp;");
+    $( "span[id*=spansintoto]" ).editable();
+    //$( "#txtdrawnosintoto" ).editable();
+    
+});
+
+
+$("input").keypress(function (event) 
+ {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == 13) 
+            {
+                var sechoose        =   $("#sechoose").val();
+                if(sechoose == "damacai")
+                {
+                    var temp = this;
+                    var name = this.id;
+                    //console.log(name);
+                    btnsavedmc(name);
+                }
+                if(sechoose == "magnum")
+                {
+                    var temp = this;
+                    var name = this.id;
+                    btnsavemagnum(name);
+                }
+                if(sechoose == "toto")
+                {
+                    var temp = this;
+                    var name = this.id;
+                    btnsavetoto(name);
+                }
+                if(sechoose == "sinfourd")
+                {
+                    var temp = this;
+                    var name = this.id;
+                    btnsavesin4d(name);
+                }
+                if(sechoose == "sintoto")
+                {
+                    var temp = this;
+                    var name = this.id;
+                    btnsavesintoto(name);
+                } 
+                //SaveToteSin();
+                return false;   
+            }
+});
+
+$("input").focusout(function (event) 
+{
+    var temp = this;
+    var name = this.id;
+    curent_name_focus_out = name;     
+});
+
+
+/*
+|----------------------------------------------------------------
+|function get value date for textbox
+|----------------------------------------------------------------
+*/
+function get_value_date()
+{
+    var d       = new Date();
+    var month   = d.getMonth()+1;
+    var day     = d.getDate();
+    var strdate = (day<10 ? '0' : '') + day + '-' + (month<10 ? '0' : '') + month + '-' + d.getFullYear();
+    
+    $("#txtdate").val(strdate);
+    
+    var txtdate	=	$("#txtdate").val();
+	get_data_by_txtdate(txtdate);
+}
+
+/* set url default mặc định */
+function getURL()
+{
+    //http://localhost/racing/Source/admin/login
+    //http://localhost/nhaplieuspa/login
+    //http://www.test.com:8082/index.php#tab2?foo=123
+    // window.location.host                   www.test.com:8082
+    //window.location.hostname               www.test.com
+    //window.location.port                   8082
+    //window.location.protocol               http
+    //window.location.pathname               index.php
+    //window.location.href                   http://www.test.com:8082/index.php#tab2
+    //window.location.hash                   #tab2
+    //window.location.search                 ?foo=123
+
+    var str= window.location.href.toString() ;
+    var host = window.location.host.toString() ;
+    str = str.toLowerCase();
+    var res = "";
+    if(str.indexOf("localhost") >=0 || str.indexOf("127.0.0.1")>=0)
+    {
+        res= "http://" + host + "/racing/Source/";        
+        //return res;    
+    }
+    else
+    {
+       res = "http://" + host + "/";   
+       //alert("str : "+str);
+       
+    }
+    return res;
+}
+/*
+|----------------------------------------------------------------
+|call function from bootstrap-datepicker-event-click.js
+|----------------------------------------------------------------
+*/
+function get_data_by_txtdate(txtdate)
+{
+    var sechoose        =   $( "#sechoose" ).val();
+    $.ajax({
+            type:"POST",
+            url: "../admin/homeld_controller/get_data_by_txtdate",
+            dataType:"text",
+            data: {
+                    txtdate         :   txtdate,
+                    sechoose        :   sechoose
+            },
+            cache:false,
+            success:function (data) {
+                get_data_by_txtdate_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function get_data_by_txtdate_Complete(data)
+{
+    var sechoose        =   $( "#sechoose" ).val();
+    var sRes        = JSON.parse(data);
+    if(sRes.flag    == 1)
+    {
+        if(sRes.sechoose    ==  sechoose    && sechoose    ==   "damacai")
+        {
+            $( "#dmc1" ).val(sRes.arr_res.one);
+            $( "#dmc2" ).val(sRes.arr_res.two);
+            $( "#dmc3" ).val(sRes.arr_res.three);
+            
+            var strpc       =   sRes.arr_res.special;
+            var arr_pc      =   strpc.split('|');
+            for(var i   = 0; i < 10; i ++)
+            {
+                $( "#dmc_special" + (i + 1) ).val(arr_pc[i]);
+            }
+            
+            var strcon      =   sRes.arr_res.consolation;
+            var arr_con     =   strcon.split('|');
+            for(var i   = 0; i < 10; i ++)
+            {
+                $( "#dmc_con" + (i + 1) ).val(arr_con[i]);
+            }
+        }
+        else
+        {
+            if(sRes.sechoose    ==  sechoose    && sechoose    ==   "magnum")
+            {
+                var str_se1         =   "";
+                jQuery.each( arr_str, function( i, val ) {
+                    if(sRes.arr_res.one == val)
+                        str_se1     +=   '<option value="' + val + '" selected="selected">' + val + '</option>';
+                    else
+                        str_se1     +=   '<option value="' + val + '">' + val + '</option>';
+                });
+                $( "#semagnum1" ).html(str_se1);
+                
+                var str_se2         =   "";
+                jQuery.each( arr_str, function( i, val ) {
+                    if(sRes.arr_res.two == val)
+                        str_se2     +=   '<option value="' + val + '" selected="selected">' + val + '</option>';
+                    else
+                        str_se2     +=   '<option value="' + val + '">' + val + '</option>';
+                });
+                $( "#semagnum2" ).html(str_se2);
+                
+                var str_se3         =   "";
+                jQuery.each( arr_str, function( i, val ) {
+                    if(sRes.arr_res.three == val)
+                        str_se3     +=   '<option value="' + val + '" selected="selected">' + val + '</option>';
+                    else
+                        str_se3     +=   '<option value="' + val + '">' + val + '</option>';
+                });
+                $( "#semagnum3" ).html(str_se3);
+                
+                
+                var strpc           =   sRes.arr_res.special;
+                var arr_pc      =   strpc.split('|');
+                for(var i   = 0; i < 13; i ++)
+                {
+                    $( "#magnum_special" + (i + 1) ).val(arr_pc[i]);
+                }
+                
+                var strcon      =   sRes.arr_res.consolation;
+                var arr_con     =   strcon.split('|');
+                for(var i   = 0; i < 10; i ++)
+                {
+                    $( "#magnum_con" + (i + 1) ).val(arr_con[i]);
+                }
+            }
+            else
+            {
+                if(sRes.sechoose    ==  sechoose    && sechoose    ==   "toto")
+                {
+                    var str_se1         =   "";
+                    jQuery.each( arr_str, function( i, val ) {
+                        if(sRes.arr_res.one == val)
+                            str_se1     +=   '<option value="' + val + '" selected="selected">' + val + '</option>';
+                        else
+                            str_se1     +=   '<option value="' + val + '">' + val + '</option>';
+                    });
+                    $( "#setoto" ).html(str_se1);
+                    
+                    var str_se2         =   "";
+                    jQuery.each( arr_str, function( i, val ) {
+                        if(sRes.arr_res.two == val)
+                            str_se2     +=   '<option value="' + val + '" selected="selected">' + val + '</option>';
+                        else
+                            str_se2     +=   '<option value="' + val + '">' + val + '</option>';
+                    });
+                    $( "#setoto2" ).html(str_se2);
+                    
+                    var str_se3         =   "";
+                    jQuery.each( arr_str, function( i, val ) {
+                        if(sRes.arr_res.three == val)
+                            str_se3     +=   '<option value="' + val + '" selected="selected">' + val + '</option>';
+                        else
+                            str_se3     +=   '<option value="' + val + '">' + val + '</option>';
+                    });
+                    $( "#setoto3" ).html(str_se3);
+                    
+                    
+                    var strpc           =   sRes.arr_res.special;
+                    var arr_pc      =   strpc.split('|');
+                    for(var i   = 0; i < 13; i ++)
+                    {
+                        $( "#toto_special" + (i + 1) ).val(arr_pc[i]);
+                    }
+                    
+                    var strcon      =   sRes.arr_res.consolation;
+                    var arr_con     =   strcon.split('|');
+                    for(var i   = 0; i < 10; i ++)
+                    {
+                        $( "#toto_con" + (i + 1) ).val(arr_con[i]);
+                    }
+                }
+                else
+                {
+                    if(sRes.sechoose    ==  sechoose    && sechoose    ==   "sintoto")
+                    {                      
+                        var sRes_sintoto            = JSON.parse(data);
+                        $("#txtdrawnosintoto").html(sRes_sintoto.drawno);
+                        $("#spansintoto1").val("");
+                        var strwinningNo        =   sRes.arr_res.winningNo;
+                        var arr_winningNo       =   strwinningNo.split('|');
+                        for(var i   = 0; i < 7; i ++)
+                        {
+                            $("#spansintoto" + (i + 1) ).val(arr_winningNo[i]);
+                        }
+                        $("#spansintoto8" ).val(sRes.arr_res.additional);
+                                                      
+                    }
+                    else
+                    {
+
+                        if(sRes.sechoose    ==  sechoose    && sechoose    ==   "sinfourd")
+                        {
+
+                            $("#sin4d1" ).val(sRes.arr_res.one);
+                            $("#sin4d2" ).val(sRes.arr_res.two);
+                            $("#sin4d3" ).val(sRes.arr_res.three);
+                            
+                            var strpc       =   sRes.arr_res.special;
+                            var arr_pc      =   strpc.split('|');
+                            for(var i   = 0; i < 10; i ++)
+                            {
+                                $("#sin4d_special" + (i + 1) ).val(arr_pc[i]);
+                            }
+                            
+                            var strcon      =   sRes.arr_res.consolation;
+                            var arr_con     =   strcon.split('|');
+                            for(var i   = 0; i < 10; i ++)
+                            {
+                                $("#sin4d_con" + (i + 1) ).val(arr_con[i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        // damacai
+        //$("[id*=dmc]").val("");
+        $("#dmc1").val("");
+        $("#dmc2").val("");
+        $("#dmc3").val("");
+        $("[id*=dmc_special]").val("");
+        $("[id*=dmc_con]").val("");
+        // magnum
+        $("[id*=semagnum]").val("");
+        $("[id*=magnum_special]").val("");
+        $("[id*=magnum_con]").val("");
+
+        // toto
+        $("[id*=setoto]").val("");
+        $("[id*=toto_special]").val("");
+        $("[id*=toto_con]").val("");
+
+        // sin 4d
+        //sin4d1
+        $("[id*=sin4d]").val("");
+        $("[id*=sin4d_special]").val("");
+        $("[id*=sin4d_con]").val("");
+
+        // sintoto
+        $("[id*=spansintoto]").val("");
+    }
+
+}
+/*
+|----------------------------------------------------------------
+| function choose function 
+|----------------------------------------------------------------
+*/
+function choose_function(sechoose)
+{
+    var txtdate	=	$("#txtdate").val();
+    //get_data_by_txtdate(txtdate);
+    getevent();            
+    $("table[id*='tbl']").hide();
+    $("#tbl" + sechoose).show();   
+}
+/*
+|----------------------------------------------------------------
+| function save damacai
+|----------------------------------------------------------------
+*/
+function btnsavedmc(name)
+{
+    //name : LoaiGT +  virtiGT
+    //LoaiGT : 1ST, 2ND, 3RD, Special, Consolation
+    //virtiGT: 0-n
+
+    $( "#notifyerr" ).hide();
+    $( "#notifysuccess" ).hide();
+    
+    var lastnum     = "";
+    
+    //{"flag":1,"str_left":"Damacai","str_right":"1St","top_number":"1111"};
+    var ndjs = {};
+    var list_dmc = {};
+    ndjs.flag=1;
+    ndjs.str_left ="Damacai";
+    ndjs.str_right="";
+    ndjs.top_number = "";
+
+    var txtdate     =   $( "#txtdate" ).val();
+    var dmc1        =   $( "#dmc1" ).val(); 
+    if(!$.isBlank(dmc1) && name=="dmc1")
+    {
+        lastnum = dmc1;  
+        ndjs.flag=1;
+        ndjs.str_left ="Damacai";
+        ndjs.str_right="1ST";
+        ndjs.top_number = lastnum; 
+    }
+    
+    var dmc2        =   $( "#dmc2" ).val();
+    if(!$.isBlank(dmc2) && name == "dmc2")
+    {
+        lastnum = dmc2;   
+        ndjs.flag=1;
+        ndjs.str_left ="Damacai";
+        ndjs.str_right="2ND";
+        ndjs.top_number = lastnum;  
+    }
+
+    var dmc3        =   $( "#dmc3" ).val();
+    if(!$.isBlank(dmc3) && name == "dmc3")
+    {
+        lastnum = dmc3;   
+        ndjs.flag=1;
+        ndjs.str_left ="Damacai";
+        ndjs.str_right="3RD";
+        ndjs.top_number = lastnum;  
+    }
+
+    var dmc_special = [];
+    for(var i = 1; i < 11; i ++)
+    {
+        var element         =   $( "#dmc_special" + i ).val();
+
+        dmc_special.push(element);
+        var ten = "dmc_special"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;  
+            ndjs.flag=1;
+            ndjs.str_left ="Damacai";
+            ndjs.str_right="Special_"+i;
+            ndjs.top_number = lastnum;   
+            console.log("special_"+i+" : "+element);
+        }
+       
+    }
+    
+    var dmc_con = [];
+    for(var i = 1; i < 11; i ++)
+    {
+        var element         =   $( "#dmc_con" + i ).val();
+        dmc_con.push(element);
+        var ten = "dmc_con"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;    
+            ndjs.flag=1;
+            ndjs.str_left ="Damacai";
+            ndjs.str_right="Consolation_"+i;
+            ndjs.top_number = lastnum;
+            console.log("Consolation_"+i+" : "+element);
+        }
+       
+    }
+        
+    list_dmc.specail    = dmc_special;
+    list_dmc.cosolation = dmc_con;
+    list_dmc.dmc1       = dmc1;
+    list_dmc.dmc2       = dmc2;
+    list_dmc.dmc3       = dmc3;
+    list_dmc.txtday     = txtdate;
+    $.ajax({
+            type:"POST",
+            url: "../admin/homeld_controller/btnsavedmc",
+            dataType:"text",
+            data: {
+                    txtdate         :   txtdate,
+                    dmc1            :   dmc1,
+                    dmc2            :   dmc2,
+                    dmc3            :   dmc3,
+                    dmc_special     :   dmc_special,
+                    dmc_con         :   dmc_con
+            },
+            cache:false,
+            success:function (data) {
+                btnsavedmc_Complete(data, ndjs, list_dmc);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+(function($){
+  $.isBlank = function(obj){
+    return(!obj || $.trim(obj) === "");
+  };
+})(jQuery);
+function btnsavedmc_Complete(data, ndjs,list_dmc)
+{
+    var sRes    = JSON.parse(data);
+    if(sRes     =   1)
+    {
+        var trans ={};
+        trans.res = 'LotLivedraw_dmc';
+        trans.ndjs = ndjs;
+        trans.list  = list_dmc;
+        //var res = 'LotLivedraw_dmc';
+        //vả//
+        socket.emit('PageRefresh_livedraw', trans); //LotLivedraw_dmc
+           console.log(trans);
+	       //console.log(ndjs);
+        $( "#notifysuccess" ).show();
+    }
+    else
+        $( "#notifyerr" ).show();
+}
+/*
+|----------------------------------------------------------------
+| function save magnum
+|----------------------------------------------------------------
+*/
+function btnsavemagnum(name)
+{
+    $( "#notifyerrmagnum" ).hide();
+    $( "#notifysuccessmagnum" ).hide();
+     var lastnum     = "";
+
+    //{"flag":1,"str_left":"Damacai","str_right":"1St","top_number":"1111"};
+    var ndjs = {};
+    ndjs.flag=1;
+    ndjs.str_left ="magnum";
+    ndjs.str_right="";
+    ndjs.top_number = "";
+
+    var txtdate          =   $("#txtdate").val();
+    var semagnum1        =   $("#semagnum1" ).val();
+    if(!$.isBlank(semagnum1) && name=="semagnum1")
+    {
+        lastnum = semagnum1;  
+        ndjs.flag=1;
+        ndjs.str_left ="magnum";
+        ndjs.str_right="1ST";
+        ndjs.top_number = lastnum; 
+    }
+    var semagnum2        =   $("#semagnum2" ).val();
+    if(!$.isBlank(semagnum2) && name=="semagnum2")
+    {
+        lastnum = semagnum2;  
+        ndjs.flag=1;
+        ndjs.str_left ="magnum";
+        ndjs.str_right="2ND";
+        ndjs.top_number = lastnum; 
+    }
+    var semagnum3        =   $("#semagnum3" ).val();
+    if(!$.isBlank(semagnum3) && name=="semagnum3")
+    {
+        lastnum = semagnum3;  
+        ndjs.flag=1;
+        ndjs.str_left ="magnum";
+        ndjs.str_right="3RD";
+        ndjs.top_number = lastnum; 
+    }
+
+    var magnum_special = [];
+    for(var i = 1; i < 14; i ++)
+    {
+        var element         =   $( "#magnum_special" + i ).val();
+        magnum_special.push(element);
+        var ten = "magnum_special"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;  
+            ndjs.flag=1;
+            ndjs.str_left ="magnum";
+            ndjs.str_right="Special_"+i;
+            ndjs.top_number = lastnum;   
+            console.log("special_"+i+" : "+element);
+        }
+    }
+    
+    var magnum_con = [];
+    for(var i = 1; i < 11; i ++)
+    {
+        var element         =   $("#magnum_con" + i ).val();
+        magnum_con.push(element);
+        var ten = "magnum_con"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;  
+            ndjs.flag=1;
+            ndjs.str_left ="magnum";
+            ndjs.str_right="Consolation_"+i;
+            ndjs.top_number = lastnum;   
+            console.log("Consolation_"+i+" : "+element);
+        }
+    }
+
+    var list_magnum = {};
+        list_magnum.semagnum1 = semagnum1;
+        list_magnum.semagnum2 = semagnum2;
+        list_magnum.semagnum3 = semagnum3;
+        list_magnum.txtday    = txtdate;
+        list_magnum.specail    = magnum_special;
+        list_magnum.cosolation = magnum_con;
+    
+    $.ajax({
+            type:"POST",
+            url: "../admin/homeld_controller/btnsavemagnum",
+            dataType:"text",
+            data: {
+                    semagnum1               :   semagnum1,
+                    semagnum2               :   semagnum2,
+                    semagnum3               :   semagnum3,
+                    magnum_special          :   magnum_special,
+                    magnum_con              :   magnum_con,
+                    txtdate                 :   txtdate
+            },
+            cache:false,
+            success:function (data) {
+                btnsavemagnum_Complete(data,ndjs,list_magnum);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function btnsavemagnum_Complete(data,ndjs,list_magnum)
+{
+    var sRes    = JSON.parse(data);
+    if(sRes.result     =   1)
+    {
+        //var res = 'LotLivedraw';
+        //socket.emit('PageRefresh', res);
+	       //console.log(res);
+        var trans = {};
+           trans.res  = 'LotLivedraw_mn';
+           trans.ndjs = ndjs;
+           trans.list = list_magnum;
+        socket.emit('PageRefresh_livedraw', trans);
+	       console.log(trans);
+        $( "#notifysuccessmagnum" ).show();
+    }
+    else
+        $( "#notifyerrmagnum" ).show();
+}
+/*
+|----------------------------------------------------------------
+| function save toto
+|----------------------------------------------------------------
+*/
+function btnsavetoto(name)
+{
+    $( "#notifyerrtoto" ).hide();
+    $( "#notifysuccesstoto" ).hide();
+    var lastnum     = "";
+    
+    //{"flag":1,"str_left":"Damacai","str_right":"1St","top_number":"1111"};
+    var ndjs = {};
+    ndjs.flag=1;
+    ndjs.str_left ="toto";
+    ndjs.str_right="";
+    ndjs.top_number = "";
+
+    var txtdate        =   $("#txtdate").val();
+    
+    var setoto1        =   $("#setoto1" ).val();
+    if(!$.isBlank(setoto1) && name=="setoto1")
+    {
+        lastnum = setoto1;  
+        ndjs.flag=1;
+        ndjs.str_left ="toto";
+        ndjs.str_right="1ST";
+        ndjs.top_number = lastnum; 
+    }
+    var setoto2        =   $("#setoto2" ).val();
+    if(!$.isBlank(setoto2) && name=="setoto2")
+    {
+        lastnum = setoto2;  
+        ndjs.flag=1;
+        ndjs.str_left ="toto";
+        ndjs.str_right="2ND";
+        ndjs.top_number = lastnum; 
+    }
+    var setoto3        =   $("#setoto3" ).val();
+    if(!$.isBlank(setoto3) && name=="setoto3")
+    {
+        lastnum = setoto3;  
+        ndjs.flag=1;
+        ndjs.str_left ="toto";
+        ndjs.str_right="3RD";
+        ndjs.top_number = lastnum; 
+    }
+
+    var toto_special = [];
+    for(var i = 1; i < 14; i ++)
+    {
+        var element         =   $("#toto_special" + i ).val();
+        toto_special.push(element);
+        var ten = "toto_special"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;  
+            ndjs.flag=1;
+            ndjs.str_left ="toto";
+            ndjs.str_right="Special_"+i;
+            ndjs.top_number = lastnum;   
+            console.log("special_"+i+" : "+element);
+        }
+
+    }
+    
+    var toto_con = [];
+    for(var i = 1; i < 11; i ++)
+    {
+        var element         =   $( "#toto_con" + i ).val();
+        toto_con.push(element);
+        var ten = "toto_con"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;    
+            ndjs.flag=1;
+            ndjs.str_left ="toto";
+            ndjs.str_right="Consolation_"+i;
+            ndjs.top_number = lastnum;
+            console.log("Consolation_"+i+" : "+element);
+        }
+    }
+
+    var list_toto = {};
+        list_toto.setoto1 = setoto1;
+        list_toto.setoto2 = setoto2;
+        list_toto.setoto3 = setoto3;
+        list_toto.txtday  = txtdate;
+        list_toto.specail = toto_special;
+        list_toto.consolation = toto_con;
+    
+    $.ajax({
+            type:"POST",
+            url: "../admin/homeld_controller/btnsavetoto",
+            dataType:"text",
+            data: {
+                    setoto1               :   setoto1,
+                    setoto2               :   setoto2,
+                    setoto3               :   setoto3,
+                    toto_special          :   toto_special,
+                    toto_con              :   toto_con,
+                    txtdate               :   txtdate
+            },
+            cache:false,
+            success:function (data) {
+                btnsavetoto_Complete(data,ndjs,list_toto);
+            },
+            //error: function () { alert("Error!");}
+   });
+}
+function btnsavetoto_Complete(data,ndjs,list_toto){
+    var sRes    = JSON.parse(data);
+    if(sRes     =   1)
+    {
+        var res = 'LotLivedraw';
+        //socket.emit('PageRefresh', res);
+	       //console.log(res);
+        var trans = {};
+            trans.res = 'LotLivedraw_toto';
+            trans.ndjs = ndjs;
+            trans.list = list_toto;
+        socket.emit('PageRefresh_livedraw', trans);
+	       console.log(trans);
+        $( "#notifysuccesstoto" ).show();
+    }
+    else
+        $( "#notifyerrtoto" ).show();
+}
+/*
+|----------------------------------------------------------------
+| function save sin4d
+|----------------------------------------------------------------
+*/
+function btnsavesin4d(name)
+{
+    $( "#notifyerrsin4d" ).hide();
+    $( "#notifysuccesssin4d" ).hide();
+
+    var lastnum     = "";
+    var ndjs = {};
+    ndjs.flag=1;
+    ndjs.str_left ="Sin4D";
+    ndjs.str_right="";
+    ndjs.top_number = "";
+    
+    var sin4d1        =   $("#sin4d1" ).val();
+    if(!$.isBlank(sin4d1) && name=="sin4d1")
+    {
+        lastnum = sin4d1;  
+        ndjs.flag=1;
+        ndjs.str_left ="Sin4D";
+        ndjs.str_right="1ST";
+        ndjs.top_number = lastnum; 
+    }
+    var sin4d2        =   $("#sin4d2" ).val();
+    if(!$.isBlank(sin4d2) && name=="sin4d2")
+    {
+        lastnum = sin4d2;  
+        ndjs.flag=1;
+        ndjs.str_left ="Sin4D";
+        ndjs.str_right="2ND";
+        ndjs.top_number = lastnum; 
+    }
+    var sin4d3        =   $("#sin4d3" ).val();
+    if(!$.isBlank(sin4d3) && name=="sin4d3")
+    {
+        lastnum = sin4d3;  
+        ndjs.flag=1;
+        ndjs.str_left ="Sin4D";
+        ndjs.str_right="3RD";
+        ndjs.top_number = lastnum; 
+    }
+    var txtdate       =   $("#txtdate").val();
+    
+    var sin4d_special = [];
+    for(var i = 1; i < 11; i ++)
+    {
+        var element         =   $("#sin4d_special" + i ).val();
+        sin4d_special.push(element);
+        var ten = "sin4d_special"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;  
+            ndjs.flag=1;
+            ndjs.str_left ="Sin4D";
+            ndjs.str_right="Special_"+i;
+            ndjs.top_number = lastnum;   
+            console.log("special_"+i+" : "+element);
+        }
+    }
+    
+    var sin4d_con = [];
+    for(var i = 1; i < 11; i ++)
+    {
+        var element         =   $("#sin4d_con" + i ).val();
+        sin4d_con.push(element);
+        var ten = "sin4d_con"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;    
+            ndjs.flag=1;
+            ndjs.str_left ="Sin4D";
+            ndjs.str_right="Consolation_"+i;
+            ndjs.top_number = lastnum;
+            console.log("Consolation_"+i+" : "+element);
+        }
+    }
+
+    var list_sin4D = {};
+        list_sin4D.sin4d1      = sin4d1;
+        list_sin4D.sin4d2      = sin4d2;
+        list_sin4D.sin4d3      = sin4d3;
+        list_sin4D.txtday      = txtdate;
+        list_sin4D.specail     = sin4d_special;
+        list_sin4D.consolation = sin4d_con;
+    
+    $.ajax({
+            type:"POST",
+            url:"../admin/homeld_controller/btnsavesin4d",
+            dataType:"text",
+            data: {
+                    sin4d1            :   sin4d1,
+                    sin4d2            :   sin4d2,
+                    sin4d3            :   sin4d3,
+                    sin4d_special     :   sin4d_special,
+                    sin4d_con         :   sin4d_con,
+                    txtdate           :   txtdate
+            },
+            cache:false,
+            success:function (data) {
+                btnsavesin4d_Complete(data,ndjs,list_sin4D);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function btnsavesin4d_Complete(data,ndjs,list_sin4D){
+    var sRes    = JSON.parse(data);
+    if(sRes     =   1)
+    {
+        var trans = {};
+        trans.res = 'LotLivedrawSin';
+        trans.ndjs = ndjs;
+        trans.list  = list_sin4D;
+        socket.emit('PageRefresh_sinlivedraw', trans);
+	       console.log(trans);
+        $( "#notifysuccesssin4d" ).show();
+    }
+    else
+        $( "#notifyerrsin4d" ).show();
+}
+function btnresetsintoto()
+{
+    $('[class^=input-medium]').val("");
+    //$("input[class*=input-medium]").val("");
+    $("[id*=spansintoto]").val("");
+    //$( "span[id*=spansintoto]" ).editable();
+}
+
+function btnsavesintoto(name)
+{
+    $( "#notifyerrsintoto" ).hide();
+    $( "#notifysuccesssintoto" ).hide();
+
+    var lastnum     = "";
+    var ndjs = {};
+    ndjs.flag=1;
+    ndjs.str_left ="SinToTo";
+    ndjs.str_right="";
+    ndjs.top_number = "";
+
+    var txtdate = $("#txtdate").val();
+    
+    var sintoto = [];
+    for(var i = 1; i < 9; i ++)
+    {
+        var element         =   $("#spansintoto" + i ).val();
+        sintoto.push(element);
+        var ten = "spansintoto"+i.toString();
+        if(!$.isBlank(element) && name == ten)
+        {
+            lastnum = element;  
+            ndjs.flag=1;
+            ndjs.str_left ="SinToTo";
+            ndjs.str_right="ShowSintoto_"+i;
+            ndjs.top_number = lastnum;   
+            console.log("ShowSintoto_"+i+" : "+element);
+        }
+    }
+    
+    var list_sintoto = {};
+       list_sintoto.sintoto = sintoto;
+       list_sintoto.txtday  = txtdate;
+    $.ajax({
+            type:"POST",
+            url: "../admin/homeld_controller/btnsavesintoto",
+            dataType:"text",
+            data: {
+                    sintoto         :   sintoto,
+                    txtdate         :   txtdate
+
+            },
+            cache:false,
+            success:function (data) {
+                btnsavesintoto_Complete(data,ndjs,list_sintoto);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function btnsavesintoto_Complete(data,ndjs,list_sintoto)
+{
+    var sRes    = JSON.parse(data);
+    if(sRes     =   1)
+    {
+        var trans = {};
+            trans.res      = 'LotLivedrawSinToTo';
+            trans.ndjs     = ndjs;
+            trans.list     = list_sintoto;
+        socket.emit('PageRefresh_sinlivedraw', trans);
+	       console.log(trans);
+        $( "#notifysuccesssintoto" ).show();
+    }
+    else
+        $( "#notifyerrsintoto" ).show();
+
+}
+
+function ClearAllLiveDraw()
+{
+    $("select option").prop("selected", false);
+}
+
+function ClearAllDamacai()
+{
+    $("#dmc1").val("");
+    $("#dmc2").val("");
+    $("#dmc3").val("");
+    $('[id*=dmc_special]').val("");
+    $('[id*=dmc_con]').val("");
+}
+
+function ClearAllMagnum()
+{
+    $("#semagnum1").find('option').removeAttr("selected");
+    $("#semagnum2").find('option').removeAttr("selected");
+    $("#semagnum3").find('option').removeAttr("selected");
+    $("#magnum_special").val("");
+    $("#magnum_con").val("");
+}
+
+function ClearAllSin4D()
+{
+    $("#sin4d1").val("");
+    $("#sin4d2").val("");
+    $("#sin4d3").val("");
+    $('[id*=sin4d_special]').val("");
+    $('[id*=sin4d_con]').val("");
+}
+
+function ClearAllToto()
+{
+    $("#setoto1").find('option').removeAttr("selected");
+    $("#setoto2").find('option').removeAttr("selected");
+    $("#setoto3").find('option').removeAttr("selected");
+    $("#toto_special").val("");
+    $("#toto_con").val("");
+}
+
+function SaveConvertDMT()
+{
+    var txtdate = $("#txtdate").val();
+    $.ajax({
+            type:"POST",
+            url: "../admin/homeld_controller/SaveConvertDMT",
+            dataType:"text",
+            data: {
+                    txtdate         :   txtdate
+            },
+            cache:false,
+            success:function (data) {
+                SaveConvertDMT_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+
+function  SaveConvertDMT_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    if(sRes.result == 1 ||  sRes.result == "1")
+    {     
+        $("#showmessageDMT").text("success");
+    }
+
+}

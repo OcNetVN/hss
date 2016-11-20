@@ -1,0 +1,330 @@
+$(document).ready(function(){
+     var txthref = $(location).attr('href');
+     var arr_href = txthref.split('/');
+     var href_comon     = arr_href[arr_href.length-1];
+     if(href_comon == "hrsnotification")
+     {
+        LoadHorseNotification();
+     }
+     else{
+             // notification lottery
+            if(href_comon == "lottnotifications")
+            { 
+                LoadLottreyNotification();
+            }
+
+            if(href_comon == "soccnotification")
+            {
+                 LoadSoccerNotification();
+            }    
+     }   
+});
+
+$("input[id*='check_']").click(function () 
+{     
+     var sound          = "";
+     var vibration      = "";
+     var tips           = "";
+     var racingday      = "";
+     var west_Malaysia  = "";
+     var singapore      = "";
+     var east_Malaysia  = "";
+     var goal           = "";
+     var soccer_tips    = "";
+     var txthref = $(location).attr('href');
+     var arr_href = txthref.split('/');
+     //var href_main      = arr_href[arr_href.length-2];
+     //console.log(href_main);
+     var href_comon     = arr_href[arr_href.length-1];
+     
+
+     // notification horse
+     if(href_comon == "hrsnotification")
+     {
+        if($('#check_racing_day').is(':checked'))
+            racingday = 1;
+        else
+            racingday = 0;
+
+        if($('#check_tips').is(':checked'))
+            tips = 1;
+        else
+            tips = 0;
+
+        ReceivedHorseNotification(racingday,tips);
+     }
+     else{
+             // notification lottery
+            if(href_comon == "lottnotifications")
+            {
+                if($('#check_west_malaysia').is(':checked'))
+                    west_Malaysia = 1;
+                else
+                    west_Malaysia = 0;
+
+                if($('#check_singapore').is(':checked'))
+                    singapore = 1;
+                else
+                    singapore = 0;
+
+                if($('#check_east_malaysia').is(':checked'))
+                    east_Malaysia = 1;
+                else
+                    east_Malaysia = 0;
+
+                ReceivedLottreyNotification(west_Malaysia,singapore,east_Malaysia);
+
+            }
+
+            if(href_comon == "soccnotification")
+            {
+                if($('#check_goal').is(':checked'))
+                     goal = 1;
+                else
+                     goal = 0;
+
+                if($('#check_soccer_tips').is(':checked'))
+                     soccer_tips = 1;
+                 else
+                     soccer_tips = 0; 
+                 ReceivedSoccerNotification(goal,soccer_tips);
+            }    
+     }   
+     
+
+});
+
+function ReceivedNotification(sound,vibration)
+{
+    $.ajax({
+            type:"POST",
+            url:"../home_controller/tickhorsenotification",
+            dataType:"text",
+            data: {   
+                    sound:sound,
+                    vibration:vibration
+                  },
+            cache:false,
+            success:function (data) {
+                tickhrsontification_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+function ReceivedSoccerNotification(goal,soccer_tips)
+{
+    $.ajax({
+            type:"POST",
+            url:"../home_controller/tickhorsenotification",
+            dataType:"text",
+            data: {   
+                    goal:goal,
+                    soccertips:soccer_tips
+                  },
+            cache:false,
+            success:function (data) {
+                tickhrsontification_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+
+function ReceivedHorseNotification(racingday,tips)
+{
+    $.ajax({
+            type:"POST",
+            url:"../home_controller/tickhorsenotification",
+            dataType:"text",
+            data: {   
+                     tips:tips,
+                     racingday:racingday
+                  },
+            cache:false,
+            success:function (data) {
+                tickhrsontification_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+
+function ReceivedLottreyNotification(west_Malaysia,singapore,east_Malaysia)
+{
+    $.ajax({
+            type:"POST",
+            url:"../home_controller/tickhorsenotification",
+            dataType:"text",
+            data: {   
+                     westMalaysia:west_Malaysia,
+                     singapore:singapore,
+                     eastMalaysia:east_Malaysia
+                  },
+            cache:false,
+            success:function (data) {
+                tickhrsontification_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+
+
+
+function tickhrsontification_Complete(data)
+{
+     var sRes = JSON.parse(data);
+     var Rel;
+     var listflag;
+     if(sRes.result == 1 || sRes.result == "1")
+     {
+          $("#span_tb").text("tick success");
+     }
+}
+
+function LoadLottreyNotification()
+{
+    $.ajax({
+            type:"POST",
+            url:"../home_controller/loadTickNotification",
+            dataType:"text",
+            //data: {},
+            cache:false,
+            success:function (data) {
+                LoadLottreyNotification_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+
+function LoadLottreyNotification_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    var l_noti = sRes.l_Notification;
+    var racingday;
+    var tips;
+    if(l_noti.length > 0)
+    {
+      westMalaysia     = l_noti[0]['West_Malaysia'];
+      eastMalaysia     = l_noti[0]['East_Malaysia'];
+      singapore        = l_noti[0]['Singapore'];
+      if(westMalaysia == "1" || westMalaysia == 1)
+      {
+         $("#check_west_malaysia").prop("checked",true);
+      }
+      else
+      {
+        $('#check_west_malaysia').prop("checked",false);
+      }
+
+      if(singapore == "1" || singapore == 1)
+      {
+        $("#check_singapore").prop("checked",true);
+      }
+      else
+      {
+        $("#check_singapore").prop("checked",false);
+      }
+
+      if(eastMalaysia == "1" || eastMalaysia == 1)
+      {
+        $("#check_east_malaysia").prop("checked",true);
+      }
+      else
+      {
+        $("#check_east_malaysia").prop("checked",false);
+      }
+    }
+}
+
+function LoadHorseNotification()
+{
+    $.ajax({
+            type:"POST",
+            url:"../home_controller/loadTickNotification",
+            dataType:"text",
+            //data: {},
+            cache:false,
+            success:function (data) {
+                LoadHorseNotification_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+
+function LoadSoccerNotification()
+{
+    $.ajax({
+            type:"POST",
+            url:"../home_controller/loadTickNotification",
+            dataType:"text",
+            //data: {},
+            cache:false,
+            success:function (data) {
+                LoadSoccerNotification_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+
+function LoadSoccerNotification_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    var l_noti = sRes.l_Notification;
+    var goal;
+    var tips;
+    if(l_noti.length > 0)
+    { 
+      tips          = l_noti[0]['Type_Soccer_Tips'];
+      goal          = l_noti[0]['Goal'];
+      if(tips == "1" || tips == 1)
+      {
+        $("#check_soccer_tips").prop("checked",true);
+      }
+      else
+      {
+        $("#check_soccer_tips").prop("checked",false);
+      }
+
+      if(goal == "1" || goal == 1)
+      {
+        $("#check_goal").prop("checked",true);
+      }
+      else
+      {
+        $("#check_goal").prop("checked",false);
+      }
+    }
+}
+
+function LoadHorseNotification_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    var l_noti = sRes.l_Notification;
+    var racingday;
+    var tips;
+    if(l_noti.length > 0)
+    {
+      racingday     = l_noti[0]['RacingDay'];
+      tips          = l_noti[0]['Type_Horse_Tips'];
+      if(racingday == "1" || racingday == 1)
+      {
+         $("#check_racing_day").prop("checked",true);
+      }
+      else
+      {
+        $('#check_racing_day').prop("checked",false);
+      }
+
+      if(tips == "1" || tips == 1)
+      {
+        $("#check_tips").prop("checked",true);
+      }
+      else
+      {
+        $("#check_tips").prop("checked",false);
+      }
+    }
+}
+
+function loadTickNotification_Complete(data)
+{
+
+}

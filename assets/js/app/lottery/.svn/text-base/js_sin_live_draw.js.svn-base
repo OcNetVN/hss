@@ -1,0 +1,416 @@
+socket.on('PageRefresh_sinlivedraw', function(jsondata){
+    PageRefresh = jsondata.res;
+    data = jsondata.ndjs;
+    l_data = jsondata.list;
+    console.log(jsondata);
+    if(PageRefresh == 'LotLivedrawSin')
+    {
+       //load_livedraw();
+       //load_top_number(data);
+       load_livedraw_sin4D(data,l_data);
+    }
+
+    if(PageRefresh == 'LotLivedrawSinToTo')
+    {
+        load_livedraw_sintoto(data,l_data);
+    }
+});
+
+socket.on('PageRefresh_SinToTolivedraw', function(jsondata){
+    PageRefresh = jsondata.res;
+    data = jsondata.ndjs;
+    console.log(jsondata);
+    if(PageRefresh == 'LotLivedrawSinToTo')
+    {
+       load_livedraw();
+       load_top_number(data);
+    }
+});
+
+$(document).ready(function() {
+    load_livedraw();
+    //load_top_number(); 
+});
+// PageRefresh_SinToTolivedraw
+
+/*
+|----------------------------------------------------------------
+| function load livedraw
+|----------------------------------------------------------------
+*/
+function load_livedraw(){
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/load_sin_livedraw",
+            dataType:"text",
+            cache:false,
+            success:function (data) {
+                load_sin_livedraw_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+
+
+function load_sin_livedraw_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    var txday = sRes.str_date;
+    if(txday != "")
+    {
+        $("#spandate").html(sRes.str_date);  
+    }
+    else
+    {
+        $("#spandate").html(sRes.str_date_toto);
+    }
+    
+    setTimeout(function()
+    {
+        $("#span2").html(sRes.str_twototo);
+    }, 2000);
+    setTimeout(function()
+    {
+        $("#span3").html(sRes.str_threetoto);
+    }, 2000);
+    setTimeout(function()
+    {
+         $("#span1").html(sRes.str_onetoto);
+    }, 2000);
+    
+    var l_specail = sRes.arr_sptoto;
+    var l_consolation = sRes.arr_contoto;
+    var st_specail = "";
+    var st_consolation = "";
+    if(l_consolation.length > 0)
+    {
+        for(var i=0;i<l_consolation.length;i+=2)
+        {
+            if(l_consolation[i] == " ")
+                l_consolation[i] = "&nbsp;";
+            st_consolation = st_consolation + "<tr style=\"border:1px solid #006;\">";
+            st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">"     +l_consolation[i]+"</span></td>'"; 
+            st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">" +l_consolation[i+1]+"</span></td>'"; 
+            st_consolation = st_consolation + "</tr>";
+        }
+    }
+    else{
+            for(var i=0;i<10;i+=2)
+            {
+                st_consolation = st_consolation + "<tr style=\"border:1px solid #006;\">";
+                st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">&nbsp;</span></td>'"; 
+                st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">&nbsp;</span></td>'"; 
+                st_consolation = st_consolation + "</tr>";
+            }
+    }
+    setTimeout(function()
+    {
+        $("#tbodyconsolation").html(st_consolation);
+    }, 2000);
+
+    if(l_specail.length >0)
+    {
+        for(var i=0;i<l_specail.length;i+=2)
+        {   
+            if(l_specail[i] == " ")
+                l_specail[i] = "&nbsp;";
+            st_specail = st_specail + "<tr style=\"border:1px solid #006;\">";
+            st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">"+l_specail[i]+"</span></td>'"; 
+            st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">"+l_specail[i+1]+"</span></td>'"; 
+            st_specail = st_specail + "</tr>";
+        }    
+    }
+    else{
+            for(var i=0;i<10;i+=2)
+            {
+                st_specail = st_specail + "<tr style=\"border:1px solid #006;\">";
+                st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">&nbsp;</span></td>'"; 
+                st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">&nbsp;</span></td>'"; 
+                st_specail = st_specail + "</tr>";
+            }
+    }
+
+    setTimeout(function()
+    {
+        $("#tbodyspecial").html(st_specail);
+    }, 2000);
+
+    $("#spandatetoto").html(sRes.str_date_toto);
+    var winNo1 = sRes.arr_res_winningNo[0];
+    var winNo2 = sRes.arr_res_winningNo[1];
+    var winNo3 = sRes.arr_res_winningNo[2];
+    var winNo4 = sRes.arr_res_winningNo[3];
+    var winNo5 = sRes.arr_res_winningNo[4];
+    var winNo6 = sRes.arr_res_winningNo[5];
+    var winNo7 = sRes.arr_res_winningNo[6];
+    var additional = sRes.str_additional;
+    if(winNo1 != "Empty")
+    {
+        //$("#spansintoto1").html(winNo1);
+        setTimeout(function()
+        {
+            //$("#tbodyspecial").html(st_specail);
+            $("#spansintoto1").html(winNo1);
+        }, 2000);
+    }
+    if(winNo2 != "Empty")
+    {
+        //$("#spansintoto2").html(winNo2);
+        setTimeout(function()
+        {
+            //$("#tbodyspecial").html(st_specail);
+            $("#spansintoto2").html(winNo2);
+        }, 2000);
+    }
+    if(winNo3 != "Empty")
+    {
+        //$("#spansintoto3").html(winNo3);
+        setTimeout(function()
+        {
+            $("#spansintoto3").html(winNo3);
+        }, 2000);
+
+    }
+    if(winNo4 != "Empty")
+    {
+        //$("#spansintoto4").html(winNo4);
+        setTimeout(function()
+        {
+            //$("#spansintoto3").html(winNo3);
+            $("#spansintoto4").html(winNo4);
+        }, 2000);
+    }
+    if(winNo5 !="Empty")
+    {
+        //$("#spansintoto5").html(winNo5);
+        setTimeout(function()
+        {
+            $("#spansintoto5").html(winNo5);
+        }, 2000);
+    }
+    if(winNo6 != "Empty")
+    {
+        //$("#spansintoto6").html(winNo6);
+        setTimeout(function()
+        {
+             $("#spansintoto6").html(winNo6);
+        }, 2000);
+    }
+    if(winNo7 != "Empty")
+    {
+        //$("#spansintoto7").html(winNo7);
+        setTimeout(function()
+        {
+             $("#spansintoto7").html(winNo7);
+        }, 2000);
+    }
+    if(additional != "Empty")
+    {
+        //$("#spansintoto8").html(sRes.str_additional);
+        setTimeout(function()
+        {
+              $("#spansintoto8").html(sRes.str_additional);
+        }, 2000);
+    }
+    
+}
+
+function load_top_number(idata)
+{
+    console.log(idata);
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/load_top_number",
+            dataType:"json",
+            data: {datap:idata},
+            cache:false,
+            success:function (data) {
+                load_top_number_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+
+function isWeekend(date)
+{
+    var day = new Date(date);
+        showday = day.getDay();
+        //console.log(showday);
+    var l_Wek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    return  l_Wek[showday];   
+}
+
+function load_livedraw_sin4D(data,l_sin4D)
+{
+    var specail;
+    var cosolation;
+    var st_specail = "";
+    var st_consolation = "";
+    cosolation = l_sin4D.consolation;
+    specail    = l_sin4D.specail;
+    if(data.flag    ==  1)
+    {
+        if(l_sin4D.txtday != "" || l_sin4D.txtday != " ")
+        {
+            var day = l_sin4D.txtday;
+            var arr_day = day.split("-");
+            var days = arr_day[2] + "-" + arr_day[1] + "-" + arr_day[0];
+            var showday = isWeekend(days);
+            $("#spandate").text(day + " " + showday);
+            console.log($("#spandate").text(day + " " + showday));
+        }
+        $("[id*=spantopnumber]").html("");
+        $("#spanleftnumber").html(data.str_left);
+        $("#spanrightnumber").html(data.str_right);
+        var top_number = data.top_number;
+        if(top_number != "" || top_number !=" ")
+                effectnumber(top_number);
+        //var top_number      =   sRes.top_number;
+        //var type            =   sRes.type;
+        //effectnumber(top_number,type);
+        $("#tbodyspecial").html("");
+        $("#tbodyconsolation").html("");
+        $("#span1").html(l_sin4D.sin4d1);
+        $("#span2").html(l_sin4D.sin4d2);
+        $("#span3").html(l_sin4D.sin4d3);
+        if(specail.length >0)
+        {
+            for(var i=0;i<specail.length;i+=2)
+            {   
+                if(specail[i] == " ")
+                    specail[i] = "&nbsp;";
+                st_specail = st_specail + "<tr style=\"border:1px solid #006;\">";
+                st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">"+specail[i]+"</span></td>'"; 
+                st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">"+specail[i+1]+"</span></td>'"; 
+                st_specail = st_specail + "</tr>";
+            }    
+        }
+        else{
+                for(var i=0;i<10;i+=2)
+                {
+                    st_specail = st_specail + "<tr style=\"border:1px solid #006;\">";
+                    st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">&nbsp;</span></td>'"; 
+                    st_specail = st_specail + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">&nbsp;</span></td>'"; 
+                    st_specail = st_specail + "</tr>";
+                }
+        }
+
+        $("#tbodyspecial").html(st_specail);
+
+        if(cosolation.length > 0)
+        {
+            for(var i=0;i<cosolation.length;i+=2)
+            {
+                if(cosolation[i] == " ")
+                    cosolation[i] = "&nbsp;";
+                st_consolation = st_consolation + "<tr style=\"border:1px solid #006;\">";
+                st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">"     +cosolation[i]+"</span></td>'"; 
+                st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">" +cosolation[i+1]+"</span></td>'"; 
+                st_consolation = st_consolation + "</tr>";
+            }
+        }
+        else{
+                for(var i=0;i<10;i+=2)
+                {
+                    st_consolation = st_consolation + "<tr style=\"border:1px solid #006;\">";
+                    st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+i+"\">&nbsp;</span></td>'"; 
+                    st_consolation = st_consolation + "<td width=\"50%\" align=\"center\"><span id=\"spans"+(i+1)+"\">&nbsp;</span></td>'"; 
+                    st_consolation = st_consolation + "</tr>";
+                }
+        }
+
+        $("#tbodyconsolation").html(st_consolation);  
+    }
+}
+
+function load_livedraw_sintoto(data,l_sintoto)
+{
+    var sintoto = l_sintoto.sintoto;
+    if(data.flag    ==  1)
+    {
+        if(l_sintoto.txtday != "" || l_sintoto.txtday != " ")
+        {
+            var day = l_sintoto.txtday;
+            var arr_day = day.split("-");
+            var days = arr_day[2] + "-" + arr_day[1] + "-" + arr_day[0];
+            var showday = isWeekend(days);
+            $("#spandate").text(day + " " + showday);
+            console.log($("#spandate").text(day + " " + showday));
+        }
+        $("[id*=spantopnumber]").html("");
+        $("#spanleftnumber").html(data.str_left);
+        $("#spanrightnumber").html(data.str_right);
+        var top_number      =   data.top_number;
+        if(top_number != "" || top_number !=" ")
+                effectnumber(top_number);
+        if(sintoto.length > 0)
+        {
+            for(var i=0 ; i < sintoto.length;i++)
+            {
+                    $("#spansintoto" + (i+1)).html(sintoto[i]);
+            }
+        }
+
+    }
+}
+function load_top_number_Complete(data)
+{
+    var sRes = data;
+    if(sRes.flag    ==  1)
+    {
+        $("[id*=spantopnumber]").html("");
+        $("#spanleftnumber").html(sRes.str_left);
+        $("#spanrightnumber").html(sRes.str_right);
+        var top_number      =   sRes.top_number;
+        var type            =   sRes.type;
+        effectnumber(top_number,type);  
+    }
+}
+
+function effectnumber(number)
+{
+    setTimeout(function(){
+
+         $("#SrollingNumber").shuffleLetters({
+            "text": number
+        });   
+        // if(type == "Sin4D")
+        // {
+        //     $("#SrollingToTo").css("display","none");
+        //     $("#Srolling4D").css("display","");
+        //     $('.counter1').jOdometer({
+        //         increment: 1000,
+        //         counterStart:'0000',
+        //         counterEnd: number,
+        //         numbersImage: '../../assets/img/app/jodometer-numbers.png',
+        //         spaceNumbers: 3,
+        //         offsetRight:-1,
+        //         speed:2000,
+        //         delayTime:0,
+        //         widthNumber:30
+        //     }); 
+        // }
+
+        // if(type == "SinToTo")
+        // {
+        //     $("#SrollingToTo").css("display","");
+        //     $("#Srolling4D").css("display","none");
+        //     $('.counter1').jOdometer({
+        //         increment: 10,
+        //         counterStart:'00',
+        //         counterEnd: number,
+        //         numbersImage: '../../assets/img/app/jodometer-numbers.png',
+        //         spaceNumbers: 3,
+        //         offsetRight:-1,
+        //         speed:2000,
+        //         delayTime:0,
+        //         widthNumber:30
+        //     });
+        // }
+
+    },100);
+}
+
+
+
+

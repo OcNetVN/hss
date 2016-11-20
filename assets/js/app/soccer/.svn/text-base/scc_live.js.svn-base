@@ -1,0 +1,10 @@
+$(document).ready(function(){
+});
+
+socket.on('SoccerTODAY',function(res)
+{
+    $("#tbllistracecard").html(" ");
+    $("#tbllistracecard").html(res);
+    //loadSoccerToday();
+
+});

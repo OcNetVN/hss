@@ -1,0 +1,238 @@
+
+function Input1()
+{
+    $('#input_1').bind('blur', function() {
+    	$("#input_1").val("1");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("1");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("1");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("1");
+	});
+}
+
+function Input2()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("2");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("2");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("2");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("2");
+	});
+}
+
+function Input3()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("3");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("3");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("3");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("3");
+	});
+}
+
+function Input4()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("4");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("4");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("4");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("4");
+	});
+}
+
+function Input5()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("5");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("5");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("5");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("5");
+	});
+}
+
+function Input6()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("6");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("6");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("6");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("6");
+	});
+}
+
+function Input7()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("7");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("7");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("7");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("7");
+	});
+}
+
+function Input8()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("8");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("8");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("8");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("8");
+	});
+}
+
+function Input9()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("9");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("9");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("9");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("9");
+	});
+}
+
+function Input0()
+{
+	$('#input_1').bind('blur', function() {
+    	$("#input_1").val("0");
+	});
+
+	$('#input_2').bind('blur', function() {
+    	$("#input_2").val("0");
+	});
+
+	$('#input_3').bind('blur', function() {
+    	$("#input_3").val("0");
+	});
+
+	$('#input_4').bind('blur', function() {
+    	$("#input_4").val("0");
+	});
+}
+
+function InputCancel()
+{
+	 $("[id*='input_']" ).val("");
+}
+
+function  InputOK()
+{
+	var code1 = $("#input_1").val();
+	var code2 = $("#input_2").val();
+	var code3 = $("#input_3").val();
+	var code4 = $("#input_4").val();
+	var passcode = "";
+	if(code1 == "" && code2 == "" && code3 == "" && code4 == "")
+	{
+		alert("Please pass code empty");
+	}
+	else
+	{
+		var passcode = code1+code2+code3+code4;
+	}
+
+	$.ajax({
+            type:"POST",
+            url:"../home_controller/updatepasscode",
+            dataType:"text",
+            data: {passcode:passcode
+                  },
+            cache:false,
+            success:function (data) {
+                UpdatePasscode_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+        });
+}
+
+function UpdatePasscode_Complete(data)
+{
+   var sRes = JSON.parse(data);
+   if(sRes.result == 1 || sRes.result == "1")
+   {
+   		$("#spantb").text("Set Passcode success");
+   }
+   else
+   {
+   		$("#spantb").text("Set Passcode not success");
+   }
+}

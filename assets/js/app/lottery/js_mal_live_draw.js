@@ -1,0 +1,866 @@
+var arr_str         =   ["A","B","C","D","E","F","G","H","I","J","K","L","M"];
+var arr_getval     =  [];
+    arr_getval["A"] = 0;
+    arr_getval["B"] = 1;
+    arr_getval["C"] = 2;
+    arr_getval["D"] = 3;
+    arr_getval["E"] = 4;
+    arr_getval["F"] = 5;
+    arr_getval["G"] = 6;
+    arr_getval["H"] = 7;
+    arr_getval["I"] = 8;
+    arr_getval["J"] = 9;
+    arr_getval["K"] = 10;
+    arr_getval["L"] = 11;
+    arr_getval["M"] = 12;
+
+socket.on('PageRefresh_livedraw', function(jsondata){
+    PageRefresh = jsondata.res;
+    data = jsondata.ndjs;
+    list_dmc = jsondata.list;
+    //console.log(jsondata);
+    if(PageRefresh == 'LotLivedraw_dmc')
+    {
+       load_livedraw_dmc(data,list_dmc);
+    }
+
+    if(PageRefresh == 'LotLivedraw_mn')
+    {
+        load_livedraw_mn(data,list_dmc);
+    }
+
+    if(PageRefresh == 'LotLivedraw_toto')
+    {
+        load_livedraw_toto(data,list_dmc);
+    }
+});
+$(document).ready(function() {
+    load_livedraw(); 
+    effectnumber2('0988');
+});
+
+function load_livedraw_toto(idtop,idata)
+{
+   // console.log(idtop);
+//    console.log(idata);
+    var specail;
+    var cosolation;
+    var str = "";
+    cosolation = idata.consolation;
+    specail    = idata.specail;
+    //console.log(specail.length);
+    if(idata.txtday != "" || idata.txtday != " ")
+    {
+        var day = idata.txtday;
+        var arr_day = day.split("-");
+        var days = arr_day[2] + "-" + arr_day[1] + "-" + arr_day[0];
+        var showday = isWeekend(days);
+        $("#spandate").text(day + " " + showday);
+       // console.log($("#spandate").text(day + " " + showday));
+    }
+    if(idtop.flag    ==  1)
+    {
+        $("[id*=spantopnumber]").html("");        
+        //console.log(idtop.str_right);
+        if($('#spanLang').text() =="English"){
+            $("#spanleftnumber").html(idtop.str_left);
+            $("#spanrightnumber").html(idtop.str_right); 
+        }
+        else
+        {
+            $("#spanleftnumber").html("多多");
+            if(idtop.str_right.toLowerCase().indexOf("1st") != -1){
+               $("#spanrightnumber").html("头奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("2nd") != -1){
+               $("#spanrightnumber").html("二奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("3rd") != -1){
+               $("#spanrightnumber").html("三奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("starter") != -1){
+               $("#spanrightnumber").html("入围奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("consolation") != -1 ){
+               $("#spanrightnumber").html("安慰奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("special") != -1 ){
+               $("#spanrightnumber").html("入围奖"); 
+            }       
+        }
+       
+        var top_number      =   idtop.top_number;
+        if(top_number != "" || top_number !=" ")
+            //$("#SrollingNumber").html(top_number);
+                effectnumber(top_number);
+        var str_toto1 = "";
+        var str_toto2 = "";
+        var str_toto3 = "";
+        if(idata.setoto1 != "--" || idata.setoto1 != " ")
+            str_toto1 = arr_getval[idata.setoto1];
+        
+        if(idata.setoto2 != "--" || idata.setoto2 != " ")
+            str_toto2 = arr_getval[idata.setoto2];
+
+        if(idata.setoto3 != "--" || idata.setoto3 != " ")
+            str_toto3 = arr_getval[idata.setoto3];
+        var st1 = " ";
+        var st2 = " ";
+        var st3 = " ";
+
+        if(specail.length > 0)
+        {
+            if(typeof(specail[str_toto1]) != "undefined" || specail[str_toto1] != "")
+            {
+                st1 = specail[str_toto1];
+                $("#toto1").html(st1);
+                $("#str_toto1").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">1ST</p>");
+            }
+
+            if(typeof(specail[str_toto2]) != "undefined" || specail[str_toto2] != "")
+            {
+                st2 = specail[str_toto2];
+                $("#toto2").html(st2);
+                $("#str_toto2").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">2ND</p>");
+            }
+
+            if(typeof(specail[str_toto3]) != "undefined" || specail[str_toto3] != "")
+            {
+                st3 = specail[str_toto3];
+                $("#toto3").html(st3);
+                $("#str_toto3").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">3RD</p>");
+            }
+        }
+        
+            
+        $("#tbodytoto").html("");
+        if(specail.length > 0)
+        {
+            var dem = 0;
+            for(var i =0 ; i < specail.length;i++)
+            {
+                if(specail[i] != "" && specail[i] != " ")
+                {
+                    //console.log(specail[i]);
+                    str  +=  "<tr>";
+                    if(specail[i] == st1)
+                       str  +=  "<tr style=\"display:none;\">";
+                    if(specail[i] == st2) 
+                        str  +=  "<tr style=\"display:none;\">"; 
+                    if(specail[i] == st3)
+                        str  +=  "<tr style=\"display:none;\">";
+                    str  +=  "<td ><p style=\"color:#FFF;border:1px solid #F00;background-color:#0000CD;margin-top:-2px; height: 32px; width: 34px;\">S</p>";
+                    str  +=  "<td><p style=\"color:#000;width: 52px;border:1px solid #000;background-color:#FFF; font-size:20px;\" id=\"totosp"+dem+"\">"+specail[i]+"</p></td>";
+                    str  +=  "</tr>";
+                    dem++;
+                }
+            }
+        }
+         dem = 0;
+        if(cosolation.length > 0)
+        {
+            for(var i=0 ; i < cosolation.length;i++)
+            {
+                if(cosolation[i] != "" && cosolation[i] != " ")
+                {
+                    console.log(cosolation[i]);
+                    str  +=  "<tr>";
+                    str  +=  "<td ><p style=\"color:#FFF;border:1px solid #F00;background-color:#87CEFA; margin-top:-2px; height: 32px; width: 34px;\">C</p></td>";
+                    str  +=  "<td><p style=\"color:#000;width: 52px;border:1px solid #000;background-color:#FFF; font-size:20px;\" id=\"magnumcon"+dem+"\">"+cosolation[i]+"</p></td>";
+                    str  +=  "</tr>";
+                    dem++;
+                }
+            }
+        }
+
+        $("#tbodytoto").html(str);
+    }   
+}
+
+function load_livedraw_mn(idtop,idata)
+{
+    
+    var specail;
+    var cosolation;
+    var str = "";
+    cosolation = idata.cosolation;
+    specail    = idata.specail;       
+    if(idata.txtday != "" || idata.txtday != " ")
+    {
+        var day = idata.txtday;
+        var arr_day = day.split("-");
+        var days = arr_day[2] + "-" + arr_day[1] + "-" + arr_day[0];
+        var showday = isWeekend(days);
+        $("#spandate").text(day + " " + showday);
+        console.log($("#spandate").text(day + " " + showday));
+    }
+    if(idtop.flag    ==  1)
+    {
+        $("[id*=spantopnumber]").html("");
+       // $("#spanleftnumber").html(idtop.str_left);
+//        $("#spanrightnumber").html(idtop.str_right);
+        if($('#spanLang').text() == "English"){
+            $("#spanleftnumber").html(idtop.str_left);
+            $("#spanrightnumber").html(idtop.str_right); 
+            
+        }
+        else
+        {
+            $("#spanleftnumber").html("万能");
+           if(idtop.str_right.toLowerCase().indexOf("1st") != -1){
+               $("#spanrightnumber").html("头奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("2nd") != -1){
+               $("#spanrightnumber").html("二奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("3rd") != -1){
+               $("#spanrightnumber").html("三奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("starter") != -1){
+               $("#spanrightnumber").html("入围奖"); 
+            }
+             if(idtop.str_right.toLowerCase().indexOf("consolation") != -1 ){
+               $("#spanrightnumber").html("安慰奖"); 
+             }                          
+             if(idtop.str_right.toLowerCase().indexOf("special") != -1 ){               
+               $("#spanrightnumber").html("入围奖"); 
+            } 
+        }
+        var top_number      =   idtop.top_number;          
+        if(top_number != "" || top_number !=" ")
+            //$("#SrollingNumber").html(top_number);
+                effectnumber(top_number);
+        var str_magnum1 = " ";
+        var str_magnum2 = " ";
+        var str_magnum3 = " ";
+        if(idata.semagnum1 != "--" || idata.semagnum1 != " ")
+            str_magnum1 = arr_getval[idata.semagnum1];
+        
+        if(idata.semagnum2 != "--" || idata.semagnum2 != " ")
+            str_magnum2 = arr_getval[idata.semagnum2];
+
+        if(idata.semagnum3 != "--" || idata.semagnum3 != " ")
+            str_magnum3 = arr_getval[idata.semagnum3];
+        var st1 = " ";
+        var st2 = " ";
+        var st3 = " ";
+        $("#str_magnum1").html("");
+        $("#str_magnum2").html("");
+        $("#str_magnum3").html("");
+        if(specail.length > 0)
+        {
+            if(typeof(specail[str_magnum1]) != "undefined" || specail[str_magnum1] != " ")
+            {
+                st1 = specail[str_magnum1];
+                $("#magnum1").html(st1);
+                $("#str_magnum1").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">1ST</p>");
+            }
+
+            if(typeof(specail[str_magnum2]) != "undefined" || specail[str_magnum2] != " ")
+            {
+                st2 = specail[str_magnum2];
+                $("#magnum2").html(st2);
+                $("#str_magnum2").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">2ND</p>");
+            }
+
+            if(typeof(specail[str_magnum3]) != "undefined" || specail[str_magnum3] != " ")
+            {
+                st3 = specail[str_magnum3];
+                $("#magnum3").html(st3);
+                $("#str_magnum3").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">3RD</p>");
+            }
+        }
+           
+        $("#tbodymagnum").html("");
+        if(specail.length > 0)
+        {
+            var dem = 0;
+            for(var i =0 ; i < specail.length;i++)
+            {
+                if(specail[i] != " " && specail[i] != "")
+                {
+                    //console.log(specail[i]);
+                    str  +=  "<tr>";
+                    if(specail[i] == st1)
+                       str  +=  "<tr style=\"display:none;\">";
+                    if(specail[i] == st2) 
+                        str  +=  "<tr style=\"display:none;\">"; 
+                    if(specail[i] == st3)
+                        str  +=  "<tr style=\"display:none;\">";
+                    str  +=  "<td ><p style=\"color:#FFF;border:1px solid #F00;background-color:#0000CD; margin-top:-2px; width: 34px;\">S</p>";
+                    str  +=  "<td><p style=\"color:#000;width: 52px;border:1px solid #000;background-color:#FFF; font-size:20px;\" id=\"magnumsp"+dem+"\">"+specail[i]+"</p></td>";
+                    str  +=  "</tr>";
+                    dem++;
+                }
+            }
+        }
+         dem = 0;
+        if(cosolation.length > 0)
+        {
+            for(var i=0 ; i < cosolation.length;i++)
+            {
+                if(cosolation[i] != " " && cosolation[i] != "")
+                {
+                    console.log(cosolation[i]);
+                    str  +=  "<tr>";
+                    str  +=  "<td ><p style=\"color:#FFF;border:1px solid #F00;background-color:#87CEFA; margin-top:-2px; height: 32px; width: 34px;\">C</p></td>";
+                    str  +=  "<td><p style=\"color:#000;width: 52px;border:1px solid #000;background-color:#FFF; font-size:20px;\" id=\"magnumcon"+dem+"\">"+cosolation[i]+"</p></td>";
+                    str  +=  "</tr>";
+                    dem++;
+                }
+            }
+        }
+
+        $("#tbodymagnum").html(str);
+    }   
+}
+
+function isWeekend(date)
+{
+    var day = new Date(date);
+        showday = day.getDay();
+        //console.log(showday);
+    var l_Wek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    return  l_Wek[showday];   
+}
+
+function load_livedraw_dmc(idtop,idata){
+    //console.log(idtop);
+    //console.log(idata);
+    if(idata.txtday != "" || idata.txtday != " ")
+    {
+        var day = idata.txtday;
+        var arr_day = day.split("-");
+        var days = arr_day[2] + "-" + arr_day[1] + "-" + arr_day[0];
+        var showday = isWeekend(days);
+        $("#spandate").text(day + " " + showday);
+       // console.log($("#spandate").text(day + " " + showday));
+    }
+    var specail;
+    var cosolation;
+    var str = "";
+    cosolation = idata.cosolation;
+    specail    = idata.specail;
+    if(idtop.flag    ==  1)
+    {
+        $("[id*=spantopnumber]").html("");
+        $("#spanleftnumber").html(idtop.str_left);
+        $("#spanrightnumber").html(idtop.str_right);      
+         if($('#spanLang').text()=="English"){
+            $("#spanleftnumber").html(idtop.str_left);
+            $("#spanrightnumber").html(idtop.str_right); 
+        }
+        else
+        {
+            $("#spanleftnumber").html("馬會");
+            if(idtop.str_right.toLowerCase().indexOf("1st") != -1){
+               $("#spanrightnumber").html("头奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("2nd") != -1){
+               $("#spanrightnumber").html("二奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("3rd") != -1){
+               $("#spanrightnumber").html("三奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("starter") != -1){
+               $("#spanrightnumber").html("入围奖"); 
+            }
+            if(idtop.str_right.toLowerCase().indexOf("consolation") != -1 ){
+               $("#spanrightnumber").html("安慰奖"); 
+            }  
+            if(idtop.str_right.toLowerCase().indexOf("special") != -1 ){
+               $("#spanrightnumber").html("入围奖"); 
+            }  
+            
+        }
+        var top_number      =   idtop.top_number;
+       
+        if(top_number != "" || top_number !=" ")
+                effectnumber(top_number);
+        //console.log(top_number);
+        $("#tbodydamacai").html("");
+        $("#str_dmc1").html("");
+        $("#str_dmc2").html("");
+        $("#str_dmc3").html("");
+        if(idata.dmc1 != "" && idata.dmc1 != " ")
+        {
+            $("#dmc1").html(idata.dmc1);
+            $("#str_dmc1").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">1ST</p>");
+        }
+
+        if(idata.dmc2 != "" && idata.dmc2 != " ")
+        {
+            $("#dmc2").html(idata.dmc2);
+            $("#str_dmc2").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">2ND</p>");
+        }
+        if(idata.dmc3 != "" && idata.dmc3 != " ")
+        {
+            $("#dmc3").html(idata.dmc3);
+            $("#str_dmc3").html("<p style=\"color:#F00;border:1px solid #F00; margin-top:-2px; height: 32px; width: 34px;font-size:15px;\">3RD</p>");
+        }
+        if(specail.length > 0)
+        {
+            var dem = 0;
+            for(var i =0 ; i < specail.length;i++)
+            {
+                if(specail[i] != " " && specail[i] != "")
+                {
+                    //console.log(specail[i]);
+                    str = str + "<tr>";
+                    str = str + "<td><p style=\"color:#FFF;border:1px solid #F00;background-color:#0000CD; margin-top:-2px; width: 34px;\">S</p></td>";
+                    str = str +"<td><p style=\"color:#000;width: 52px;border:1px solid #000;background-color:#FFF; font-size:20px;\" id=\"dmcsp"+ dem +"\">"+specail[i]+"</p></td>";
+                    str = str +"</tr>";
+                    dem++;
+                }
+            }
+        }
+         dem = 0;
+        if(cosolation.length > 0)
+        {
+            for(var i=0 ; i <cosolation.length;i++)
+            {
+                if(cosolation[i] != " " && cosolation[i] != "")
+                {
+                    //console.log(cosolation[i]);
+                    str  +=  "<tr>";
+                    str  +=  "<td><p style=\"color:#FFF;border:1px solid #F00;background-color:#87CEFA; margin-top:-2px; height: 32px; width: 34px;\">C</p></td>";
+                    str  +=  "<td><p style=\"color:#000;width: 52px;border:1px solid #000;background-color:#FFF; font-size:20px;\" id=\"dmccon" + dem +"\">"+cosolation[i]+"</p></td>";
+                    str  +=  "</tr>";
+                    dem++;
+                }
+            }
+        }
+
+        $("#tbodydamacai").html(str);
+    }   
+}
+
+// function load_top_number(idata)
+// {
+//     console.log(idata);
+//     $.ajax({
+//             type:"POST",
+//             url: "../home_controller/load_top_number1",
+//             dataType:"json",
+//             data: {datap:idata},
+//             cache:false,
+//             success:function (data) {
+//                 load_top_number_Complete(data);
+//             },
+//             error: function () { alert("Error!");}
+//    });
+// }
+
+// function load_top_number_Complete(data)
+// {
+//     var sRes = data;
+//     if(sRes.flag    ==  1)
+//     {
+//         $("[id*=spantopnumber]").html("");
+        
+//         $("#spanleftnumber").html(sRes.str_left);
+//         $("#spanrightnumber").html(sRes.str_right);
+//         var top_number      =   sRes.top_number;
+//         //console.log(top_number);
+//         //var run             =   parseInt(top_number.length);
+//         if(top_number != "" || top_number !=" ")
+//             effectnumber(top_number);
+//     }   
+//     else
+//     {
+//         load_top_number_toto();
+//     }
+// }
+
+
+function effectnumber2(number)
+{
+    var run             =   parseInt(number.length);
+    var num             = parseInt(number);    
+    if(num < 1000)
+    {
+        num = num + 10000;
+        number = num.toString();
+    }
+    //console.log(number);
+    setTimeout(function(){
+        //$('.odometer').html(num);
+        $('#odometer').html(number);
+        if(num > 9999)
+        {
+            $('#odometer div.odometer-inside span.odometerdigitsss:first').css("display","none");
+        }
+    }, 10);
+    if(num > 9999)
+    {
+        $('#odometer div.odometer-inside span.odometerdigitsss:first').css("display","none");
+    }
+}
+
+function effectnumber(number)
+{
+    setTimeout(function()
+    { 
+        // Shuffle the container with custom text
+        $("#SrollingNumber").shuffleLetters({
+            "text": number
+        });        
+        //$('.odometer').html(number);
+    //     $(".digits").countdown({
+    //           image: "../../assets/img/app/digits.png",
+    //           format: "ssss",
+    //           startTime:0000,
+    //           endTime: number
+    //     });
+        
+     },100);
+    
+}
+
+// function effectnumber(number)
+// {
+//     setTimeout(function()
+//     {
+//         //jquery jodometer the container with custom text
+//         // $("#SrollingNumber").shuffleLetters({
+//         //     "text": number
+//         // });  
+
+//         $('.counter1').textEffects({text:number});
+
+//         // $('.counter1').jOdometer({
+//         //     increment: 1000,
+//         //     counterStart:'0000',
+//         //     counterEnd: number,
+//         //     numbersImage: '../../assets/img/app/jodometer-numbers.png',
+//         //     spaceNumbers: 3,
+//         //     offsetRight:-1,
+//         //     speed:5000,
+//         //     delayTime:0,
+//         //     widthNumber:30
+//         // });   
+
+//     },100);
+    
+// }
+
+function effectnumber1(number)
+{
+    effectnumber(number);
+    var num             = parseInt(number);
+    if(num < 1000)
+    {
+        num = num + 10000;
+        number = num.toString();
+    }
+    if(num > 9999)
+    {
+        $('#odometer div.odometer-inside:first span.odometerdigitsss:first').css("display","none");
+    }
+}
+
+/*
+|----------------------------------------------------------------
+| function load livedraw
+|----------------------------------------------------------------
+*/
+function load_livedraw()
+{
+    $("#spandate").html("");
+    $("span[id*=toto]").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    $("span[id*=dmc]").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    $("span[id*=magnum]").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");    
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/load_mal_livedraw",
+            dataType:"text",
+            cache:false,
+            success:function (data) {
+                load_mal_livedraw_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+
+function load_mal_livedraw_Complete(data){
+    var sRes = JSON.parse(data);
+    $("#spandate").html(sRes.str_date);
+   
+    if(sRes.str_onemagnum != "" && sRes.str_onemagnum != " ")
+    {
+        $("#str_magnum1").html(sRes.str_st1);
+        setTimeout(function()
+        {
+            //$("#span2").html(sRes.str_twototo);
+            $("#magnum1").html(sRes.str_onemagnum);
+        }, 2000);
+        
+    }
+    else
+    {
+         $("#str_magnum1").html("");
+         $("#magnum1").html("");
+    }        
+
+    if(sRes.str_twomagnum !="" && sRes.str_twomagnum != " ")
+    {
+        $("#str_magnum2").html(sRes.str_nd2);
+        setTimeout(function()
+        {
+            //$("#span2").html(sRes.str_twototo);
+            $("#magnum2").html(sRes.str_twomagnum);
+        }, 2000);
+        
+    }
+    else
+    {
+        $("#str_magnum2").html("");
+        $("#magnum2").html("");
+    }
+    
+    if(sRes.str_threemagnum != "" && sRes.str_twomagnum != " ")
+    {
+        $("#str_magnum3").html(sRes.str_rd3);
+        setTimeout(function()
+        {
+            //$("#span2").html(sRes.str_twototo);
+            $("#magnum3").html(sRes.str_threemagnum);
+        }, 2000);
+    }
+    else
+    {
+        $("#str_magnum3").html("");
+        $("#magnum3").html("");
+    }
+    
+    
+    setTimeout(function()
+    {
+        $("#tbodymagnum").html(sRes.str_res_magnum);
+    }, 2000);
+    
+    if(sRes.str_onedmc != "" && sRes.str_onedmc != " ")
+    {
+        $("#str_dmc1").html(sRes.str_st1);
+        setTimeout(function()
+        {
+            //$("#span2").html(sRes.str_twototo);
+            $("#dmc1").html(sRes.str_onedmc);
+        }, 2000);
+        
+    }
+    else
+    {
+        $("#str_dmc1").html("");
+        $("#dmc1").html("");
+    }
+    if(sRes.str_twodmc != "" && sRes.str_twodmc != " ")
+    {
+        $("#str_dmc2").html(sRes.str_nd2);
+        setTimeout(function()
+        {
+            //$("#span2").html(sRes.str_twototo);
+            $("#dmc2").html(sRes.str_twodmc);
+        }, 2000);
+        
+    }
+    else{
+
+        $("#str_dmc2").html("");
+        $("#dmc2").html("");
+    }
+
+    if(sRes.str_threedmc != "" && sRes.str_threedmc != " ")
+    {
+        $("#str_dmc3").html(sRes.str_rd3);
+        setTimeout(function()
+        {
+            //$("#span2").html(sRes.str_twototo);
+             $("#dmc3").html(sRes.str_threedmc);
+        }, 2000);
+    }
+    else
+    {
+        $("#str_dmc3").html("");
+        $("#dmc3").html("");
+    }
+    
+    setTimeout(function()
+    {
+        $("#tbodydamacai").html(sRes.str_res_dmc);
+    }, 2000);
+    
+    if(sRes.str_onetoto != "" && sRes.str_onetoto != " ")
+    {
+        $("#str_toto1").html(sRes.str_st1);
+        setTimeout(function()
+        {
+             $("#toto1").html(sRes.str_onetoto);
+        }, 2000);
+        
+    }
+    else
+    {
+        $("#str_toto1").html("");
+        $("#toto1").html("");
+    }
+    if(sRes.str_twototo != "" && sRes.str_twototo != " ")
+    {
+        $("#str_toto2").html(sRes.str_nd2);
+        setTimeout(function()
+        {
+             $("#toto2").html(sRes.str_twototo);
+        }, 2000);  
+    }
+    else
+    {
+        $("#str_toto2").html("");
+        $("#toto2").html("");
+    }
+
+    if(sRes.str_threetoto != "" && sRes.str_threetoto != " ")
+    {
+        $("#str_toto3").html(sRes.str_rd3);
+        setTimeout(function()
+        {
+            $("#toto3").html(sRes.str_threetoto);
+        }, 2000);
+        
+    }
+    else
+    {
+        $("#str_toto3").html("");
+        $("#toto3").html("");
+    }
+    
+    setTimeout(function()
+    {
+        $("#tbodytoto").html(sRes.str_res_toto);
+    }, 2000);
+    
+    var sechoose1        =   sRes.one; 
+    var sechoose2        =   sRes.two;
+    var sechoose3        =   sRes.three;
+    jQuery.each( arr_str, function( i, val ) {
+        if(val  ==  sechoose1 || val  ==  sechoose2 || val  ==  sechoose3)
+        {
+            var vt          =   parseInt(i) + 1;
+            $( "#magnumsp" + vt).html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        }
+    });
+    
+    var sechoosetoto1        =   sRes.onetoto; 
+    var sechoosetoto2        =   sRes.twototo;
+    var sechoosetoto3        =   sRes.threetoto;
+    jQuery.each( arr_str, function( i, val ) {
+        if(val  ==  sechoosetoto1 || val  ==  sechoosetoto2 || val  ==  sechoosetoto3)
+        {
+            var vt          =   parseInt(i) + 1;
+            $( "#totosp" + vt).html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        }
+    });
+}
+function load_top_number_dmc()
+{
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/load_top_number_dmc",
+            dataType:"text",
+            cache:false,
+            success:function (data) {
+                load_top_number_dmc_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function load_top_number_dmc_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    if(sRes.flag    ==  1)
+    {
+        $("[id*=spantopnumber]").html("");
+        
+        $("#spanleftnumber").html(sRes.str_left);
+        $("#spanrightnumber").html(sRes.str_right);
+        var top_number      =   sRes.top_number;
+        var run             =   parseInt(top_number.length);
+        for(var i = 0; i < run; i ++)
+        {
+            var str_top_number  =   top_number.substr(i, 1);
+            $("#spantopnumber" + (i + 1)).html(str_top_number);
+        }
+    }
+    else
+    {
+        load_top_number_toto();
+    }
+}
+
+function load_top_number_mn()
+{
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/load_top_number_mn",
+            dataType:"text",
+            cache:false,
+            success:function (data) {
+                load_top_number_mn_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function load_top_number_mn_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    if(sRes.flag    ==  1)
+    {
+        $("[id*=spantopnumber]").html("");
+        $("#spanleftnumber").html(sRes.str_left);
+    
+        $("#spanrightnumber").html(sRes.str_right);
+        var top_number      =   sRes.top_number;
+        var run             =   parseInt(top_number.length);
+        for(var i = 0; i < run; i ++)
+        {
+            var str_top_number  =   top_number.substr(i, 1);
+            $("#spantopnumber" + (i + 1)).html(str_top_number);
+        }   
+    }
+    else
+    {
+        load_top_number_dmc();
+    }
+}
+
+function load_top_number_toto()
+{
+    $.ajax({
+            type:"POST",
+            url: "../home_controller/load_top_number_toto",
+            dataType:"text",
+            cache:false,
+            success:function (data) {
+                load_top_number_toto_Complete(data);
+            },
+            error: function () { alert("Error!");}
+   });
+}
+function load_top_number_toto_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    if(sRes.flag    ==  1)
+    {
+        $("[id*=spantopnumber]").html("");
+        $("#spanleftnumber").html(sRes.str_left);          
+            
+        $("#spanrightnumber").html(sRes.str_right);
+         console.log(sRes.str_right) 
+        var top_number      =   sRes.top_number;
+        var run             =   parseInt(top_number.length);
+        for(var i = 0; i < run; i ++)
+        {
+            var str_top_number  =   top_number.substr(i, 1);
+            $("#spantopnumber" + (i + 1)).html(str_top_number);
+        }
+    }
+}

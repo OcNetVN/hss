@@ -1,0 +1,6 @@
+function refershIframe()
+{
+	$('#currentIFRAME').attr("src", $('#currentIFRAME').attr("src"));
+}
+
+setTimeout(refershIframe(), 20000);

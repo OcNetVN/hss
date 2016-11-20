@@ -1,0 +1,755 @@
+// call this from the developer console and you can control both instances
+var calendars = {};
+
+$(document).ready( function() {
+
+    // assuming you've got the appropriate language files,
+    // clndr will respect whatever moment's language is set to.
+    // moment.lang('ru');
+
+    // here's some magic to make sure the dates are happening this month.
+    var thisMonth = moment().format('YYYY-MM');
+
+    var eventArray = [
+        { startDate: thisMonth + '-10', endDate: thisMonth + '-14', title: 'Multi-Day Event' },
+        { startDate: thisMonth + '-21', endDate: thisMonth + '-23', title: 'Another Multi-Day Event' }
+    ];
+
+    // the order of the click handlers is predictable.
+    // direct click action callbacks come first: click, nextMonth, previousMonth, nextYear, previousYear, or today.
+    // then onMonthChange (if the month changed).
+    // finally onYearChange (if the year changed).
+
+    calendars.clndr1 = $('.cal1').clndr({
+        events: eventArray,
+        // constraints: {
+        //   startDate: '2013-11-01',
+        //   endDate: '2013-11-15'
+        // },
+        clickEvents: {
+            click: function(target) {
+                console.log(target);
+                // if you turn the `constraints` option on, try this out:
+                // if($(target.element).hasClass('inactive')) {
+                //   console.log('not a valid datepicker date.');
+                // } else {
+                //   console.log('VALID datepicker date.');
+                // }
+            },
+            nextMonth: function() {
+                console.log('next month.');
+				clickday();
+            },
+            previousMonth: function() {
+                console.log('previous month.');
+				clickday();
+            },
+            onMonthChange: function() {
+                console.log('month changed.');
+				clickday();
+            },
+            nextYear: function() {
+                console.log('next year.');
+				clickday();
+            },
+            previousYear: function() {
+                console.log('previous year.');
+				clickday();
+            },
+            onYearChange: function() {
+                console.log('year changed.');
+				clickday();
+            }
+        },
+        multiDayEvents: {
+            startDate: 'startDate',
+            endDate: 'endDate'
+        },
+        showAdjacentMonths: true,
+        adjacentDaysChangeMonth: false
+    });
+
+    calendars.clndr2 = $('.cal2').clndr({
+        template: $('#template-calendar').html(),
+        events: eventArray,
+        startWithMonth: moment().add('month', 1),
+        clickEvents: {
+            click: function(target) {
+                console.log(target);
+            }
+        },
+        forceSixRows: true
+    });
+
+    // bind both clndrs to the left and right arrow keys
+    $(document).keydown( function(e) {
+        if(e.keyCode == 37) {
+            // left arrow
+            calendars.clndr1.back();
+            calendars.clndr2.back();
+        }
+        if(e.keyCode == 39) {
+            // right arrow
+            calendars.clndr1.forward();
+            calendars.clndr2.forward();
+        }
+    });
+    
+	$('#ChooseCountry').change(function()
+    {
+       getevent();
+    }).trigger('change');
+    
+	clickday();
+	//getevent();
+});
+function getevent()
+{
+       var day = $('.day-contents').html();
+        if(parseFloat(day)<10)
+            day = "0"+day;
+        //alert(day); return;
+        var stryear = $('.month').html();           
+        var year = stryear.split('</span>')[1];
+        year = year.substring(1);
+        var month = stryear.split('</span>')[0];
+        month = month.substring(6);
+        //alert(month);
+        var arr_month = { January : "01", February : "02", March : "03", April : "04", May : "05", June : "06", July : "07", August :"08", September : "09", October : "10", November : "11", December : "12" };
+        console.log(arr_month[month]);
+		var texthref = $(location).attr('href');
+		var arrhref = texthref.split('/');
+		var last_arrhref = arrhref[arrhref.length-1];
+		if(last_arrhref == "race_card") //processing for page race_card
+		{
+            
+			//test event day
+            var Coutry = $("#ChooseCountry").val();
+            $.ajax({
+                        type:"POST",
+                        url: "home_controller/loadRace_Date",
+                        dataType:"text",
+                        data: { Country: Coutry},
+                        cache:false,
+                        success:function (data) 
+                        {     
+                          var sRes = JSON.parse(data);
+                            if(sRes.RaceDate_U != null || sRes.RaceDate_U !="")
+                            {
+                                var info_date = sRes.RaceDate_U;
+                                var strday = "";
+                                var strmonty = "";
+                                var stryear  = "";
+                                var date_com = "";
+                                $('.day-contents').attr({style: ""});
+                                if(info_date.length >0)
+                                {
+                                    for(var i=0;i<info_date.length;i++){
+                                         var RaceDate = info_date[i].RaceDay;
+                                          stryear      =  RaceDate.substring(0,4);
+                                          strmonty     =  RaceDate.substring(4,6);
+                                          strday       =  RaceDate.substring(6);
+                                          date_com     =  stryear + '-' + strmonty + '-' + strday;
+                                          //alert(date_com);
+                                          if(arr_month[month] == strmonty)
+                                          {
+                                              $('.calendar-day-'+ date_com + ' .day-contents').attr({
+                                                    style: "background: #CCC; color:#FFF; text-decoration:underline;",
+                                                    id: "dayevent_" + date_com
+                                              });
+                                          }
+                                    }
+                                }
+                                else
+                                {
+                                   $('.day-contents').attr({style: ""});
+                                }
+                            }
+                            $("#tblrace").css("display","none");
+                        }
+            });
+          
+		}
+		else
+		{
+			if(last_arrhref == "race_result") //processing for page race_result
+			{
+
+                var Coutry = $("#ChooseCountry").val();
+                $.ajax({
+                            type:"POST",
+                            url: "home_controller/loadRaceResul_Date",
+                            dataType:"text",
+                            data: { Country: Coutry},
+                            cache:false,
+                            success:function (data) {     
+                              var sRes = JSON.parse(data);
+                                if(sRes.RaceDate_U != null || sRes.RaceDate_U !=""){
+                                    var info_date = sRes.RaceDate_U;
+                                    var strday = "";
+                                    var strmonty = "";
+                                    var stryear  = "";
+                                    var date_com = "";
+                                    $('.day-contents').attr({style: ""});
+                                    if(info_date.length >0)
+                                    {
+                                        for(var i=0;i<info_date.length;i++)
+                                        {
+                                             var RaceDate  = info_date[i].RaceDay;
+                                              if(RaceDate != null )
+                                              {
+                                                  stryear      =  RaceDate.substring(0,4);
+                                                  strmonty     =  RaceDate.substring(4,6);
+                                                  strday       =  RaceDate.substring(6);
+                                                  date_com     =  stryear + '-' + strmonty + '-' + strday;
+                                                  //alert(date_com);
+                                                  if(arr_month[month] == strmonty)
+                                                  {
+                                                      $('.calendar-day-'+ date_com + ' .day-contents').attr({
+                                                                              style: "background: #CCC; color:#FFF; text-decoration:underline;",
+                                                                              id: "dayevent_" + date_com
+                                                                            });
+                                                  }
+                                              }
+                                        }
+                                    }
+                                    else
+                                    {
+                                      $('.day-contents').attr({style: ""});
+                                    }
+                                }
+                            }
+                });
+			}
+		}
+}
+//click day
+function clickday()
+{	
+	getevent();
+	$('.day-contents').bind("click",function()
+    {
+			var day = $(this).html();
+			if(parseFloat(day)<10)
+				day = "0"+day;
+			//alert(day); return;
+			var stryear = $('.month').html();			
+			var year = stryear.split('</span>')[1];
+			year = year.substring(1);
+			var month = stryear.split('</span>')[0];
+			month = month.substring(6);
+			//alert(month);
+			var arr_month = { January : "01", February : "02", March : "03", April : "04", May : "05", June : "06", July : "07", August :"08", September : "09", October : "10", November : "11", December : "12" };
+			//alert (arr_month['first']);
+			//alert (arr_month[month]);
+			var date = day + "-" + arr_month[month] + "-" + year;
+			//alert(date);
+			var divdate = year + "-" + arr_month[month] + "-" + day;
+			//alert(divdate); return;
+            var getdate = year + arr_month[month] + day;
+            
+			$('.day-contents').attr({
+									  style: "background: #FFF; color:#797979"
+									});
+			$('.day-contents').removeAttr( "id" );
+			$('.calendar-day-' + divdate + ' .day-contents').attr({
+																  style: "background: #1FB0AB; color:#FFF; border-radius: 3px; cursor: pointer; width: 30px;"
+																});
+			$('.calendar-day-' + divdate + ' .day-contents').attr({
+																  id: "active"
+																});
+			
+			/*
+			|processing for each different page
+			*/
+			var texthref = $(location).attr('href');
+			var arrhref = texthref.split('/');
+			var last_arrhref = arrhref[arrhref.length-1];
+			if(last_arrhref == "race_card") //processing for page race_card
+			{					         
+                    getevent();
+                     // xu ly sự kiện ngày nào có sẽ load danh sách race card lên
+                     var country = $("#ChooseCountry").val();
+                     $.ajax({
+                        type:"POST",
+                        url: "home_controller/loadlistRaceDate",
+                        dataType:"text",
+                        data: { getdate: getdate,
+                                country:country
+                              },
+                        cache:false,
+                        success:function (data) {
+                          RaceCardDate_Complete(data);     
+                        }
+                      }); 
+                     //$('#tblrace').show(300);
+					$('#tblrace').hide();
+					var textid = $(this).attr("id");
+                    $("#gotoearly").attr('onclick','GotoET("'+ getdate +'","'+country+'")');
+                    $('#panel2').hide();
+                    $('#panel1').show();
+					
+			}
+			else
+			{
+					//
+					if(last_arrhref == "race_result") //processing for page race_result
+					{
+						getevent();
+                        // xu ly sự kiện ngày nào có sẽ load danh sách race result lên
+                         var country = $("#ChooseCountry").val();
+                         $.ajax({
+                            type:"POST",
+                            url: "home_controller/getlistraceresultday",
+                            dataType:"text",
+                            data: { getdate: getdate,
+                                    country:country
+                                  },
+                            cache:false,
+                            success:function (data) {
+                              listracesultday_Complete(data);     
+                            }
+                          });
+					}
+                    else
+                    {
+                        if(last_arrhref == "gen_statement") //processing for page gen_statement super_admin
+					    {
+					        getselecteddate1();
+                        }
+                    }					
+			}
+			/*
+			|end processing for each different page
+			*/
+	 });
+}
+//end click day
+
+//page gen_statement super_admin
+function getselecteddate1()
+{
+    $("body").addClass("loading");
+    var day = $('#active').html();
+    
+    if(day == "" || day == null)
+	{
+		var d = new Date();
+		day = d.getDate();
+	}
+	else
+	{
+		var day = ((day.length) === 1)? '0' + (day): (day);
+	}
+	var stryear = $('.month').html();			
+	var year = stryear.split('</span>')[1];
+	year = year.substring(1);
+	var month = stryear.split('</span>')[0];
+	month = month.substring(6);
+    
+	var arr_month = { January : "01", February : "02", March : "03", April : "04", May : "05", June : "06", July : "07", August :"08", September : "09", October : "10", November : "11", December : "12" };
+	
+	var date = day + "/" + arr_month[month] + "/" + year;
+    
+	$('#selecteddate').html(date);
+    get_agent_statement1(1,date);
+}
+function get_agent_statement1(page,date)
+{
+    $("body").addClass("loading");
+    
+    $.ajax({
+        type:"POST",
+        url:"home_controller/get_agent_statement",
+        dataType:"text",
+        data: {
+                page: page,
+                date: date                              
+                },
+        cache:false,
+        success:function (data) {
+            get_agent_statement1_Complete(data);
+        },
+        error: function () { alert("Error!"); $("body").removeClass("loading");}
+    });
+}
+function get_agent_statement1_Complete(data)
+{
+    var sRes = JSON.parse(data);
+    if(sRes.totalrow > 0)
+    {
+        $("#divlistresult").html(sRes.str_list);
+        $("#divpagination").html(sRes.str_numpage);
+    }
+    else
+    {
+        $("#divlistresult").html("<strong style=\"margin:10px;\">Not have any row</strong>");
+    }
+    $("body").removeClass("loading");
+}
+//end page gen_statement super_admin
+
+
+// page race card 
+function RaceCardDate_Complete(data){
+    var sRes = JSON.parse(data);
+    if(sRes.RaceDate != null || sRes.RaceDate !=""){
+        var info = sRes.RaceDate;
+        var str = "";
+        if(info.length >0){
+            for(var i=0;i<info.length;i++){
+                
+                str = str + '<tr>';
+                str = str +'<td><a href=\'javascript:void(0);\' id=\'RaceCardComple\' onclick=\'RaceCardDetail("'+ info[i].RaceID +'")\'>'+ info[i].RaceID + '</a></td>';
+                str = str +'<td>'+ info[i].RaceNo+'</td>';
+                str = str + '</tr>';
+                
+            }
+            
+            var Title   = info[0].itemsen;
+            var Chinese = info[0].itemscn;
+            var Status  = info[0].status;
+            //$("#cmb_Status option[value='"+ Status +"']").attr("selected", true);
+            $("#cmb_Status option:selected").removeAttr("selected");
+            $("#cmb_Status option").each(function(){
+
+                if(Status == $(this).val())
+                {
+                    $(this).attr("selected",true);
+
+                }else{
+                    //console.log(Status);
+                }
+            });
+            $("#txtUpTitle").val(Title);
+            $("#txtUpChine").val(Chinese);
+            $('#tblrace').show(300);
+            $("#tblrace tbody").html(str);
+            
+        }
+    }
+    if(sRes.ChooseDate != null || sRes.ChooseDate != ""){
+        var sp_RaceDate = sRes.ChooseDate;
+        var stryear      =  sp_RaceDate.substring(0,4);
+        var strmonty     =  sp_RaceDate.substring(4,6);
+        var strday       =  sp_RaceDate.substring(6);
+        var date_com     =  strday + '-' + strmonty + '-' + stryear;
+          $('#spRaceDate').text(date_com);
+          $("#spRaceDate_get").text(sp_RaceDate);
+    }
+}
+
+// page race Result
+function listracesultday_Complete(data)
+{
+  var sRes = JSON.parse(data);
+    if(sRes.RaceDate != null || sRes.RaceDate !=""){
+        var info = sRes.RaceDate;
+        var str = "";
+        var RaceNo ;
+        var RaceID ;
+        if(info.length >0)
+        {
+            for(var i=0;i<info.length;i++)
+            {
+                RaceID = info[i].RaceCardId;  
+                RaceNo = RaceID.substring(8,10);
+                str = str + '<tr>';
+                str = str +'<td><a href=\'javascript:void(0);\' id=\'RaceCardComple\' onclick=\'RaceResultDetail("'+ RaceID +'")\'>'+ RaceID + '</a></td>';
+                str = str +'<td>'+ RaceNo +'</td>';
+                str = str + '</tr>';
+                
+            }
+        }
+
+        $('#showlistRaceResult').show(300);
+        $("#tblrace tbody").html(str);
+      }
+}
+// end page race Result
+
+
+function RaceCardDetail(RaceID){
+    $.ajax({
+        type:"POST",
+        url:"home_controller/getRaceCardDetail",
+        dataType:"text",
+        data: {RaceID: RaceID },
+        cache:false,
+        success:function (data) {
+            RaceCardDetail_Complete(data);
+        },
+        error: function () { alert("Error!"); $("body").removeClass("loading");}
+    });
+}
+
+function RaceCardDetail_Complete(data){ 
+    var sRes = JSON.parse(data);
+    if(sRes.RaceID != null || sRes.RaceID !="")
+    {
+         var info = sRes.RaceID;
+         var RaceNo = sRes.listRaceNo;
+         var str = "";
+         if(RaceNo.length > 0)
+         {
+            for(var i=0;i<RaceNo.length;i++)
+            {
+               str = str + "<option value="+RaceNo[i].RaceNo+">"+RaceNo[i].RaceNo+"</option>";
+            }
+
+            $("#chooseRaceNo").html(str);
+         }
+         if(info.length > 0){ 
+             var RaceDate = info[0].RaceDay;
+             var year      = RaceDate.substring(0,4);
+             var month    = RaceDate.substring(4,6);
+             var day     = RaceDate.substring(6);
+             var  time    = day + "/" + month + "/" + year;
+             var  RaceTitle  = info[0].itemsen;
+             var  RaceDetail = info[0].Details;
+             var  RaceTitleCn = info[0].itemscn;
+             var  RaceNo      = info[0].RaceNo;
+             $('#chooseRaceNo option[value='+RaceNo+']').attr('selected','selected');
+             var  RaceCardId  = info[0].RaceID;
+             var  HorseNo     = info[0].HorseNo;
+             $("#RaceDate").text(time);
+             $('#txt_RaceDetail').val(RaceDetail);
+             $("#txt_RaceTitle").val(RaceTitle);
+             //$("#spanRaceNo").text(RaceNo);
+             $("#RaceCard_ID").text(RaceCardId);
+             $("#txt_RaceCN").val(RaceTitleCn);
+             $("#txt_RaceCN1").val(RaceTitleCn);
+             if(HorseNo == null)
+               HorseNo = "";
+             $("#txt_Horse").val(HorseNo);
+             $('#section2').show(500);
+             $("#section1").hide();
+             LoadDetailHorseInfo(RaceCardId,RaceNo);     
+         }
+    }
+  
+}
+// end page race card
+
+// page race result
+function RaceResultDetail(RaceID)
+{
+    $.ajax({
+            type:"POST",
+            url:"home_controller/LoadListRaceResult",
+            dataType:"text",
+            data: {RaceCardID: RaceID},
+            cache:false,
+            success:function (data) {
+                ShowListRaceResultDetail_Complete(data);
+            },
+            error: function () { alert("Có lỗi xảy ra!"); $("body").removeClass("loading");}
+   }); 
+}
+
+function ShowListRaceResultDetail_Complete(data)
+{
+    var sRes = JSON.parse(data);
+     if(sRes.RaceResult != null || sRes.RaceResult != "" )
+     {
+         var RaceResult = sRes.RaceResult;
+         if(RaceResult.length > 0)
+         {
+             var RaceCardID = RaceResult[0].RaceCardId;
+             var FirstHorse = RaceResult[0].FirstHorse;
+             var FirstLength = RaceResult[0].FirstLength;
+             var SecondHorse = RaceResult[0].SecondHorse;
+             var SecondLength = RaceResult[0].SecondLength;
+             var ThirdHorse = RaceResult[0].ThirdHorse;
+             var Thirdlength = RaceResult[0].Thirdlength;
+             var FourthHorse = RaceResult[0].FourthHorse;
+             var FourthLength = RaceResult[0].FourthLength;
+             var FirstWin    = RaceResult[0].FirstWin;
+             var Timing      = RaceResult[0].Timing;
+             //console.log(Timing);
+              $("#txtTiming").val(Timing);
+                 FirstWin    = FirstWin.replace(".00","");
+             if(FirstWin == -1 || FirstWin == "-1")
+                FirstWin = "SCR";
+            if(FirstWin == 0 || FirstWin == "0")
+                FirstWin = "";
+             var FirstPlace  = RaceResult[0].FirstPlace;
+                  FirstPlace = FirstPlace.replace(".00","");
+            if(FirstPlace == -1 || FirstPlace == "-1")
+                FirstPlace = "SCR";
+            if(FirstPlace == 0 || FirstPlace == "0")
+                FirstPlace = "";
+             var SecondWin   = RaceResult[0].SecondWin;
+             SecondWin = SecondWin.replace(".00","");
+            if(SecondWin == -1 || SecondWin == "-1")
+                SecondWin = "SCR";
+            if(SecondWin == 0 || SecondWin == "0")
+                SecondWin = "";
+             var SecondPlace   = RaceResult[0].SecondPlace;
+             SecondPlace = SecondPlace.replace(".00","");
+            if(SecondPlace == -1 || SecondPlace == "-1")
+                SecondPlace = "SCR";
+            if(SecondPlace == 0 || SecondPlace == "0")
+                SecondPlace = "";  
+             var ThirdWin   = RaceResult[0].ThirdWin;
+             ThirdWin = ThirdWin.replace(".00","");
+            if(ThirdWin == -1 || ThirdWin == "-1")
+                ThirdWin = "SCR";
+            if(ThirdWin == 0 || ThirdWin == "0")
+                ThirdWin = "";                
+             var ThirdPlace   = RaceResult[0].ThirdPlace;
+             ThirdPlace = ThirdPlace.replace(".00","");
+            if(ThirdPlace == -1 || ThirdPlace == "-1")
+                ThirdPlace = "SCR";
+            if(ThirdPlace == 0 || ThirdPlace == "0")
+                ThirdPlace = "";        
+             var FourthWin   = RaceResult[0].FourthWin;
+             FourthWin = FourthWin.replace(".00","");
+            if(FourthWin == -1 || FourthWin == "-1")
+                FourthWin = "SCR";
+            if(FourthWin == 0 || FourthWin == "0")
+                FourthWin = "";                
+            var FourthPlace   = RaceResult[0].FourthPlace;
+             FourthPlace = FourthPlace.replace(".00","");
+            if(FourthPlace == -1 || FourthPlace == "-1")
+                FourthPlace = "SCR";
+            if(FourthPlace == 0 || FourthPlace == "0")
+               FourthPlace = "";          
+            var Forecast2_mal     = RaceResult[0].Forecast2;
+            var QPS12_mal         = RaceResult[0].QPS12;
+            var QPS22_mal         = RaceResult[0].QPS22;
+            var QPS32_mal         = RaceResult[0].QPS32;
+            var Tiere_mal         = RaceResult[0].Tierce2;
+            var Trio1_mal         = RaceResult[0].Trio2;
+            var Quartet2_mal       = RaceResult[0].Quartet2;
+            var Quadro2_mal        = RaceResult[0].Quadro2;
+            var Quadro            = RaceResult[0].Quadro1;
+            var Quarte            = RaceResult[0].Quartet1;
+            var Forcecaset1       = RaceResult[0].Forecast1;
+            var showQPS1          = RaceResult[0].QPS11;
+            var showQPS21          = RaceResult[0].QPS21;
+            var showQPS31          = RaceResult[0].QPS31;
+            var showTierce1        = RaceResult[0].Tierce1;
+            var showTrio1          = RaceResult[0].Trio1;
+           
+            $("#txtForeCase").val(Forcecaset1);
+            $("#txtQPS").val(showQPS1);
+            $("#txtQPS3").val(showQPS21);
+            $("#txtQPS6").val(showQPS31);
+            $("#txtTiere").val(showTierce1);
+            $("#txtTrio").val(showTrio1);
+            $("#txtQuartet").val(Quarte);
+            $("#txtQuadro").val(Quadro);
+       
+            $("#txtForeCase1").val(Forecast2_mal);
+            $("#txtQPS1").val(QPS12_mal);
+            $("#txtQPS4").val(QPS22_mal);
+            $("#txtQPS7").val(QPS32_mal);
+            $("#txtTiere1").val(Tiere_mal);
+            $("#txtTrio1").val(Trio1_mal);
+            $("#txtQuartet1").val(Quartet2_mal);
+            $("#txtQuadro1").val(Quadro2_mal);           
+          
+             var FirstWin_s    = RaceResult[1].FirstWin;
+             FirstWin_s = FirstWin_s.replace(".00","");
+            if(FirstWin_s == -1 || FirstWin_s == "-1")
+                FirstWin_s = "SCR";
+            if(FirstWin_s == 0 || FirstWin_s == "0")
+                FirstWin_s = "";                
+             var FirstPlace_s  = RaceResult[1].FirstPlace;
+             FirstPlace_s = FirstPlace_s.replace(".00","");
+            if(FirstPlace_s == -1 || FirstPlace_s == "-1")
+                FirstPlace_s = "SCR";
+            if(FirstPlace_s == 0 || FirstPlace_s == "0")
+               FirstPlace_s = "";              
+             var SecondWin_s   = RaceResult[1].SecondWin;
+             SecondWin_s = SecondWin_s.replace(".00","");
+            if(SecondWin_s == -1 || SecondWin_s == "-1")
+                SecondWin_s = "SCR";
+            if(SecondWin_s == 0 || SecondWin_s == "0")
+                SecondWin_s = "";               
+             var SecondPlace_s   = RaceResult[1].SecondPlace;
+             SecondPlace_s = SecondPlace_s.replace(".00","");
+            if(SecondPlace_s == -1 || SecondPlace_s == "-1")
+                SecondPlace_s = "SCR";
+            if(SecondPlace_s == 0 || SecondPlace_s == "0")
+                SecondPlace_s = "";                
+             var ThirdWin_s   = RaceResult[1].ThirdWin;
+             ThirdWin_s = ThirdWin_s.replace(".00","");
+            if(ThirdWin_s == -1 || ThirdWin_s == "-1")
+                ThirdWin_s = "SCR";
+            if(ThirdWin_s == 0 || ThirdWin_s == "0")
+                ThirdWin_s = "";                
+            var ThirdPlace_s   = RaceResult[1].ThirdPlace;
+            ThirdPlace_s = ThirdPlace_s.replace(".00","");
+            if(ThirdPlace_s == -1 || ThirdPlace_s == "-1")
+                ThirdPlace_s = "SCR";
+            if(ThirdPlace_s == 0 || ThirdPlace_s == "0")
+                ThirdPlace_s = "";                
+             var FourthWin_s   = RaceResult[1].FourthWin;
+             FourthWin_s = FourthWin_s.replace(".00","");
+            if(FourthWin_s == -1 || FourthWin_s == "-1")
+                FourthWin_s = "SCR";
+            if(FourthWin_s == 0 || FourthWin_s == "0")
+                FourthWin_s = "";
+                
+             var FourthPlace_s   = RaceResult[1].FourthPlace;
+            FourthPlace_s = FourthPlace_s.replace(".00","");
+            if(FourthPlace_s == -1 || FourthPlace_s == "-1")
+                FourthPlace_s = "SCR";
+            if(FourthPlace_s == 0 || FourthPlace_s == "0")
+                FourthPlace_s = "";
+            var Forecast2_sin     = RaceResult[1].Forecast2;
+            var QPS12_sin         = RaceResult[1].QPS12;
+            var QPS22_sin         = RaceResult[1].QPS22;
+            var QPS32_sin         = RaceResult[1].QPS32;
+            var Tiere_sin         = RaceResult[1].Tierce2;
+            var Trio1_sin         = RaceResult[1].Trio2;
+            var Quartet_sin       = RaceResult[1].Quartet2;
+            var Quadro_sin        = RaceResult[1].Quadro2;
+            $("#txtForeCase2").val(Forecast2_sin);
+            $("#txtQPS2").val(QPS12_sin);
+            $("#txtQPS5").val(QPS22_sin);
+            $("#txtQPS8").val(QPS32_sin);
+            $("#txtTiere2").val(Tiere_sin);
+            $("#txtTrio2").val(Trio1_sin);
+            $("#txtQuartet2").val(Quartet_sin);
+            $("#txtQuadro2").val(Quadro_sin);
+
+            
+            $("#RaceCariD").text(RaceCardID);
+            $("#txtNo1").val(FirstHorse);
+            $("#txtLengh1").val(FirstLength);
+            $("#txtWin1").val("RM " + FirstWin);
+            $("#txtPlace1").val("RM " + FirstPlace);
+            $("#txtWin1_s").val("$ " + FirstWin_s);
+            $("#txtPlace1_s").val("$ " + FirstPlace_s);
+            
+            $("#txtNo2").val(SecondHorse);
+            $("#txtLengh2").val(SecondLength);
+            //$("#txtWin1").val("RM " + FirstWin);
+            $("#txtPlace2").val("RM " + SecondPlace);
+            //$("#txtWin2_s").val("$ " + SecondWin_s);
+            $("#txtPlace2_s").val("$ " + SecondPlace_s);
+            
+            $("#txtNo3").val(ThirdHorse);
+            $("#txtLengh3").val(Thirdlength);
+            //$("#txtWin1").val("RM " + FirstWin);
+            $("#txtPlace3").val("RM " + ThirdPlace);
+            //$("#txtWin3_s").val("$ " + ThirdWin_s);
+            $("#txtPlace3_s").val("$ " + ThirdPlace_s);
+            
+            $("#txtNo4").val(FourthHorse);
+            $("#txtLengh4").val(FourthLength);
+            //$("#txtWin1").val("RM " + FirstWin);
+            $("#txtPlace4").val("RM " + FourthPlace);
+            //$("#txtWin4_s").val("$ " + FourthWin_s);
+            $("#txtPlace4_s").val("$ " + FourthPlace_s);
+            
+            $('#showlistRaceResult').hide();
+            $("#sectionres").show(500);
+             
+         }
+     }
+}
+
