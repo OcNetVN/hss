@@ -1,0 +1,1 @@
+<script src="<?php echo base_url('assets/js/app/lottery/js_sin_live_draw.js'); ?>"></script>

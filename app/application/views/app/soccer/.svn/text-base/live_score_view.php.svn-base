@@ -1,0 +1,38 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td>
+        <table border="0" width="100%" cellspacing="2" cellpadding="2" style="background-color: #30627b; font-size:X-Large;">
+            <tbody>
+                <tr>
+                    <td width="70%" align="left">
+                         <div style="vertical-align: middle; color: white; width: 170px;padding:10px;">
+                            LIVE SCORE
+                         </div>
+                    </td>
+                    <td align="center">&nbsp;</td>
+                    <td width="30%" align="right">
+                        <a href="<?php echo base_url('/app/soccer/result') ?>">
+                            <input type="image"  title="Result" src="<?php echo base_url('assets/img/app/result_en.png') ?>" style="height:50px;width:50px;border-width:0px;">
+                        </a>
+                        <a href="<?php echo base_url('/app/soccer/alltable') ?>">
+                            <input type="image"  title="Table" src="<?php echo base_url('assets/img/app/table_en.png') ?>" style="height:50px;width:50px;border-width:0px;">
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+  </tr> 
+  <tr>
+    <td id="tbllistracecard">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;">
+        <tr  style="color:#FFF;">
+          <td colspan="2">
+            <iframe id="currentIFRAME" src="<?php echo base_url("app/live_score_IFRAME") ;?>" style="border:none; padding:0; margin:auto; height:800px; width:100%;"></iframe>
+          </td>
+        </tr>
+        
+      </table>
+    </td>
+  </tr>
+</table>

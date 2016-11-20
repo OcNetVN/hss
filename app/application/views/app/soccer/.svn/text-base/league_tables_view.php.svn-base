@@ -1,0 +1,139 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td>
+        <table border="0" width="100%" cellspacing="2" cellpadding="2" style="background-color: #30627b; font-size:X-Large;">
+            <tbody>
+                <tr>
+                    <td width="70%" align="left">
+                         <div style="vertical-align: middle; color: white;padding:10px;">
+                            LEAGUE TABLES
+                         </div>
+                    </td>
+                    <td align="center">&nbsp;</td>
+                    <td width="30%" align="right">
+                        <a href="<?php echo base_url('/app/soccer/result') ?>">
+                            <input type="image" name="" id="" title="Result" src="<?php echo base_url('assets/img/app/result_en.png') ?>" style="height:50px;width:50px;border-width:0px;">
+                        </a>
+                        <a href="<?php echo base_url('/app/soccer/alltable') ?>">
+                            <input type="image" name="" id="" title="Table" src="<?php echo base_url('assets/img/app/table_en.png') ?>" style="height:50px;width:50px;border-width:0px;">
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+  </tr>
+  <tr>
+    <td id="tbllistracecard">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-weight:bold;" id="tb_load_league">
+          <tr>
+            <td>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" id="tb_load_league">
+                  <!-- <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND PREMIER LEG
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  <!-- </tr>
+                   <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="50%" style="padding: 10px;" align="left">
+                       ENGLAND CHAMPIONSHIP
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center">
+                        
+                    </td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  <!-- </tr>
+                  <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND LEAGUE ONE
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  <!-- </tr>
+                  <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND LEAGUE TWO
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                 <!--  </tr> 
+                  <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND CONFERENCE NTL 
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  <!-- </tr> 
+                  <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND CONFERENCE NTL S
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  <!-- </tr> -->
+
+                 <!--  <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND CONFERENCE NTL N
+                    </td> -->
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <!-- <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php //echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php //echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  </tr>
+                  <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND NON LEG PREMIER
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  <!-- </tr>
+                  <tr style="border-style:solid; border-color:#F60; border-width:1px;">
+                    <td width="70%" style="padding: 10px;" align="left">
+                       ENGLAND NON LEG DIV ONE
+                    </td>
+                    <!-- <td width="50%" style="padding: 10px;" align="center"></td> -->
+                    <td width="10%" style="padding: 10px;" align="right">
+                       <a href="<?php echo base_url('/app/setting/lottnotifications') ?>" style="text-decoration: none;">
+                        <input name="" id="" title="Next" src="<?php echo base_url('assets/img/app/btn-next.png');?>" type="image" >
+                      </a>
+                    </td>
+                  <!-- </tr>  -->
+              </table>
+            </td>
+          </tr>
+            </table>
+    </td>
+  </tr>

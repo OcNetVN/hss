@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/HorseRacing/!svn/ver/1804/Source/app/application/models/app
+END
+m_result.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/HorseRacing/!svn/ver/1056/Source/app/application/models/app/m_result.php
+END
+m_result_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/HorseRacing/!svn/ver/494/Source/app/application/models/app/m_result_detail.php
+END
+m_damacaionetree.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/HorseRacing/!svn/ver/529/Source/app/application/models/app/m_damacaionetree.php
+END
+m_cashsweep.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/HorseRacing/!svn/ver/540/Source/app/application/models/app/m_cashsweep.php
+END
+m_scrat_et.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/HorseRacing/!svn/ver/509/Source/app/application/models/app/m_scrat_et.php
+END
+m_racecard_choose.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/HorseRacing/!svn/ver/494/Source/app/application/models/app/m_racecard_choose.php
+END
+m_racecard.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/HorseRacing/!svn/ver/375/Source/app/application/models/app/m_racecard.php
+END
+m_scrat_et_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/HorseRacing/!svn/ver/509/Source/app/application/models/app/m_scrat_et_detail.php
+END
+m_racecard_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/HorseRacing/!svn/ver/978/Source/app/application/models/app/m_racecard_detail.php
+END
+m_weight_choose.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/HorseRacing/!svn/ver/494/Source/app/application/models/app/m_weight_choose.php
+END
+m_weight.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/HorseRacing/!svn/ver/916/Source/app/application/models/app/m_weight.php
+END
+m_login.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/HorseRacing/!svn/ver/1608/Source/app/application/models/app/m_login.php
+END
+m_weight_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/HorseRacing/!svn/ver/502/Source/app/application/models/app/m_weight_detail.php
+END
+m_horse_info.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/HorseRacing/!svn/ver/1076/Source/app/application/models/app/m_horse_info.php
+END

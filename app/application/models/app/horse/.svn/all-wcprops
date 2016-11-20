@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/HorseRacing/!svn/ver/1779/Source/app/application/models/app/horse
+END
+m_result.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/HorseRacing/!svn/ver/1628/Source/app/application/models/app/horse/m_result.php
+END
+m_result_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/HorseRacing/!svn/ver/1220/Source/app/application/models/app/horse/m_result_detail.php
+END
+m_horse_info_board.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/HorseRacing/!svn/ver/993/Source/app/application/models/app/horse/m_horse_info_board.php
+END
+m_racecard.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/HorseRacing/!svn/ver/1717/Source/app/application/models/app/horse/m_racecard.php
+END
+m_racecard_choose.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/HorseRacing/!svn/ver/1057/Source/app/application/models/app/horse/m_racecard_choose.php
+END
+m_scrat_et.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/HorseRacing/!svn/ver/1679/Source/app/application/models/app/horse/m_scrat_et.php
+END
+m_racecard_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/HorseRacing/!svn/ver/1720/Source/app/application/models/app/horse/m_racecard_detail.php
+END
+m_scrat_et_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/HorseRacing/!svn/ver/1057/Source/app/application/models/app/horse/m_scrat_et_detail.php
+END
+m_weight.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/HorseRacing/!svn/ver/1753/Source/app/application/models/app/horse/m_weight.php
+END
+m_weight_choose.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/HorseRacing/!svn/ver/1753/Source/app/application/models/app/horse/m_weight_choose.php
+END
+m_weight_detail.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/HorseRacing/!svn/ver/1753/Source/app/application/models/app/horse/m_weight_detail.php
+END
+m_horse_info.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/HorseRacing/!svn/ver/1779/Source/app/application/models/app/horse/m_horse_info.php
+END

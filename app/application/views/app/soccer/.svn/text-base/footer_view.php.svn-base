@@ -1,0 +1,32 @@
+<tr>
+    <td>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#000000;font-size:16px;color:white;" >
+        <tr>
+          <td width="20%">
+            <a href="<?php echo base_url('/app/soccer/live') ?>">
+              <input type="image" src="<?php echo base_url('assets/img/app/live_en.png') ?>" style="width:30%;">
+            </a>
+          </td>
+          <td width="20%">
+            <a href="<?php echo base_url('/app/soccer/main') ?>">
+              <input type="image" src="<?php echo base_url('assets/img/app/today_en.png') ?>" style="width:30%;">
+            </a>
+          </td>
+          <td width="20%">
+            <a href="<?php echo base_url('/app/soccer/earlymarket') ?>">
+              <input type="image" src="<?php echo base_url('assets/img/app/earlymaket_en.png') ?>" style="width:30%;">
+            </a>
+          </td>
+          <td width="20%">
+             <a href="<?php echo base_url('/app/soccer/live_score') ?>">
+              <input type="image" src="<?php echo base_url('assets/img/app/livesoce.png') ?>" style="width:30%;">
+            </a>
+          </td>
+          <td width="20%">
+            <input type="image" src="<?php echo base_url('assets/img/app/faveolry.png') ?>" style="width:30%;">
+          </td>
+        </tr>        
+      </table>
+    </td>
+</tr>
+</table>

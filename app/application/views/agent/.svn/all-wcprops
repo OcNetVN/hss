@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/HorseRacing/!svn/ver/284/Source/app/application/views/agent
+END
+header_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/HorseRacing/!svn/ver/19/Source/app/application/views/agent/header_view.php
+END
+login_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/HorseRacing/!svn/ver/284/Source/app/application/views/agent/login_view.php
+END
+show_all_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/HorseRacing/!svn/ver/19/Source/app/application/views/agent/show_all_view.php
+END
+trans_history_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/HorseRacing/!svn/ver/19/Source/app/application/views/agent/trans_history_view.php
+END
+agent_page_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/HorseRacing/!svn/ver/23/Source/app/application/views/agent/agent_page_view.php
+END
+left_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/HorseRacing/!svn/ver/23/Source/app/application/views/agent/left_view.php
+END
+gen_statement_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/HorseRacing/!svn/ver/23/Source/app/application/views/agent/gen_statement_view.php
+END

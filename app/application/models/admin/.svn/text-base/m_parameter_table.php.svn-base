@@ -1,0 +1,199 @@
+<?php
+class M_parameter_table extends CI_Model{
+        public function __construct()
+        {
+            parent::__construct();
+        }
+        
+        public function loadAllTables(){
+        $sql = "SELECT * FROM `scc_all_tables`";
+        $arr_Category = $this->db->query($sql)->result();
+        $arr = array('Category' => $arr_Category);
+        return $arr;
+        }
+   
+        public function loadLeagueTable(){
+            $cate = $_POST['Category'];
+            $sql  = "select * from `scc_league_tables` where `RefIdFlag`='$cate'";
+            $arr_SubCate = $this->db->query($sql)->result();
+            $arr = array('SubCate' => $arr_SubCate);
+            return $arr;
+        }
+
+        public function LoadInforLeague()
+        {
+          $ItemID = "";
+          if(isset($_POST['Item']))
+            $ItemID = $_POST['Item'];
+          $sql = "SELECT * FROM `scc_league_tables` WHERE `id`='$ItemID'";
+          $ar_Sub = $this->db->query($sql)->result();
+          $req = "";
+          if(count($ar_Sub) != 0)
+          {
+            $req = 1;
+          }
+
+          $arr = array('Result'=>$req,'ItemDetail'=>$ar_Sub);
+          return $arr;
+        }
+        
+     public function deleteLeagueTable(){
+        $subCate = $_POST['subCate'];
+        if($subCate != ""){
+            $sql  = "DELETE FROM `scc_league_tables` WHERE `id`='$subCate'";
+            $this->db->query($sql); 
+        }
+        $arr = array('SubCate' => $subCate);
+        return $arr;
+     }
+   
+      public function SaveCountry()
+      {
+          $id = $_POST['Cate'];
+          $name = $_POST['Name'];
+          $allowedExts = array('gif','jpeg','jpg','png');
+          $temp = explode(".",$_FILES["file"]["name"]);
+          $extension = end($temp);
+          $str = "";
+          $result = "";
+          $req    = "";
+          if ((($_FILES["file"]["type"] == "image/gif")|| ($_FILES["file"]["type"] == "image/jpeg")
+                || ($_FILES["file"]["type"] == "image/jpg")|| ($_FILES["file"]["type"] == "image/pjpeg")
+                || ($_FILES["file"]["type"] == "image/x-png")|| ($_FILES["file"]["type"] == "image/png"))
+            && ($_FILES["file"]["size"] < 200000)
+            && in_array($extension, $allowedExts))
+          {
+              if($_FILES["file"]["error"] > 0)
+              {
+                  //echo "Resturn Code:".$_FILES["file"]["error"];
+                   $str = $_FILES["file"]["error"];
+                   $req = 0;
+              }
+              else
+              {
+                  $filename = $_FILES["file"]["name"];
+                  if(file_exists("assets/img/app/flags/".$filename))
+                  {
+                      $str =  $filename . " already exists. ";
+                      $req = 0;
+                  }
+                  else
+                  {
+                      move_uploaded_file($_FILES["file"]["tmp_name"],"assets/img/app/flags/".$filename);
+                      //echo "Stored in: " . "app/flags/" .$filename;
+                      //print_r(base_url("assets/img/app/flags/".$filename));
+                      //die();
+                  }
+              }
+          }
+          else
+          {
+              $filename = "";
+          }
+          //if($req != 0)
+          //{
+              if($id != null)
+              {
+                  $sql = "SELECT * FROM `scc_all_tables` WHERE `id`='$id'";
+                  $Cate = $this->db->query($sql)->result();
+                  if(count($Cate) != 0)
+                  {
+                      $sql_update = "UPDATE `scc_all_tables` SET `CountryName`='$name',`Flag`='$filename' WHERE `id`='$id'";
+                      $result = $this->db->query($sql_update);
+                      if($result)
+                        $req = 1;
+                  }
+                  else
+                  {
+                      $sql = "INSERT INTO `scc_all_tables`(`CountryName`,`Flag`,`CreadedDate`)VALUES('$name','$filename',NOW())";
+                      $result = $this->db->query($sql);
+                      if($result)
+                        $req = 1;
+                  }
+                  
+              }
+              else
+              {
+                  $sql = "INSERT INTO `scc_all_tables`(`CountryName`,`CreadedDate`)VALUES('$name',NOW())";
+                  $result = $this->db->query($sql);
+                  if($result)
+                    $req = 1;
+              }
+          //}
+            
+          $arr = array('result'=>$req,"str_notifi"=>$str);
+          return $arr;
+          
+      }
+   
+      public function addLeagueTable(){
+          $id           = $_POST['subcate'];
+          $idparent     = $_POST['idparent'];
+          $league       = $_POST['league'];
+          //$venue        = $_POST['venue'];
+          //$season       = $_POST['season'];
+          $req = "";
+          if($id != null)
+          {
+              $sql = "SELECT * FROM `scc_league_tables` WHERE `id`='$id'";
+              $Cate = $this->db->query($sql)->result();
+              if(count($Cate) != 0)
+              {
+                  $sql_update = "UPDATE `scc_league_tables` SET `League`='$league',`Venue`='',`Season`='' WHERE `id`='$id'";
+                  $result = $this->db->query($sql_update);
+                  if($result)
+                    $req = 1;
+              }
+              else{
+                  $sql = "INSERT INTO `scc_league_tables`(`League`,`Venue`,`Season`,`RefIdFlag`,`CreadedDay`)VALUES('$league','','','$idparent',NOW())";
+                  $result = $this->db->query($sql);
+                  if($result)
+                    $req = 1;
+              }  
+          }
+          else
+          {
+            $sql = "INSERT INTO `scc_league_tables`(`League`,`Venue`,`Season`,`RefIdFlag`,`CreadedDay`)VALUES('$league','','','$idparent',NOW())";
+            $result = $this->db->query($sql);
+            if($result)
+              $req = 1;
+          }
+
+          $arr = array('result'=>$req);
+          return $arr;  
+      }
+
+      public function savetabledetail()
+      {
+          $event = $_POST['cho_league'];
+          $venue = $_POST['venue'];
+          $seson = $_POST['season'];
+          $txday = $_POST['txday'];
+          $txtdate = "";
+          $str_date = "";
+          $req = "";
+          if($_POST['txday'])
+          {
+            $txday    = $_POST['txday'];
+            $txtdate  = explode("-", $txday);
+            $str_date = $txtdate[2].$txtdate[1].$txtdate[0];
+          }
+          $l_table = json_decode($_POST['league']);
+          if(count($l_table) > 0)
+          {
+              foreach ($l_table as $value) 
+              {
+                  $NameTeam = str_replace("'","",$value->Team);
+                  $sql_tables = "INSERT INTO `scc_tables`(`txtday`,`team`,`tb_P`,`tb_W`,`tb_D`,`tb_Pos`,`tb_L`,`tb_F`,`tb_A`,`tb_GD`,`tb_Pts`,`tb_FI`,`tb_Y`,`tb_R`,`tb_Sh`,`tb_ShT`,`RefIdLeague`,`Venue`,`Season`)
+                                 VALUES('$str_date','$NameTeam','$value->P','$value->W','$value->D','$value->Pos','$value->L','$value->F','$value->A','$value->GD','$value->Pts','$value->Fi','$value->Y','$value->R','$value->Sh','$value->ShT','$event','$venue','$seson')";
+
+                  $req = $this->db->query($sql_tables);
+                  if($req)
+                    $result = 1;
+              }
+          }
+
+          $arr  = array('result'=>$result);
+          return $arr;
+      }
+}

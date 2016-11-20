@@ -1,0 +1,119 @@
+<?php
+
+class M_sabah extends CI_Model{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    /*
+	|----------------------------------------------------------------
+	| function load sabah
+	|----------------------------------------------------------------
+	*/
+    public function load_sabah(){
+        
+        if(isset($_POST["seday"]) && $_POST["seday"] !="" && $_POST["seday"] !="null")
+        {
+            $day        = $_POST["seday"]; //format dd/mm/yyyy
+            $arr_day    = explode("-",$day);
+            $yyyymmdd   = $arr_day[2].$arr_day[1].$arr_day[0];
+        }
+        else
+            $yyyymmdd   = date("Ymd");
+        $dd_mm_yyyy = substr($yyyymmdd,-2)."-".substr($yyyymmdd,4,2)."-".substr($yyyymmdd,0,4);
+        $span_date  = substr($yyyymmdd,0,4)."-".substr($yyyymmdd,4,2)."-".substr($yyyymmdd,-2);
+        
+        // $str_date = "";
+        // $weekDay = "";
+        // for($i=10;$i>-11;$i--)
+        // {
+        //     $date = date_create($span_date);
+        //     date_sub($date, date_interval_create_from_date_string($i.' days'));
+        //     if($dd_mm_yyyy == date_format($date, 'd-m-Y'))
+        //     {
+        //         $weekDay = $this->m_common_lottery->isWeekend(date_format($date, 'Y-m-d'));
+        //         $str_date .='<option value="'.date_format($date, 'd-m-Y').'" selected="selected">'.date_format($date, 'd-m-Y')."&nbsp;&nbsp;".$weekDay.'</option>';
+        //     }
+        //     else
+        //     {
+        //         $weekDay = $this->m_common_lottery->isWeekend(date_format($date, 'Y-m-d'));
+        //         $str_date .='<option value="'.date_format($date, 'd-m-Y').'">'.date_format($date, 'd-m-Y')."&nbsp;&nbsp;".$weekDay.'</option>';
+        //     }
+        // }
+        
+      $sql = "SELECT * FROM `lot_sabah` WHERE `txday` = '$yyyymmdd'";
+      $query = $this->db->query($sql)->row_array();
+      
+      if(count($query) > 0)
+      {
+          $str_Draw_No          = $query["Draw_No"];
+          $str_1st              = $query["1st"];
+          $str_2nd              = $query["2nd"];
+          $str_3rd              = $query["3rd"];
+          $str_Special          = $query["Special"];
+          $str_Consolation      = $query["Consolation"];
+          $str_Loto_date        = $query["Lotto_txday"];
+          $loto_date            = substr($str_Loto_date,-2)."-".substr($str_Loto_date,4,2)."-".substr($str_Loto_date,0,4);
+          $str_Loto_drawno      = $query["Lotto_DrawNo"];
+          $str_Loto             = $query["Lotto"];
+          $str_Lotto_1st        = $query["Lotto_1st"];
+          $str_Lotto_2nd        = $query["Lotto_2nd"];
+          
+          $arr_Special          = explode("|",$str_Special);
+          //print_r($arr_Special);die;
+          $i = 1;
+          $str_spacial_res = "";
+          foreach($arr_Special as $row_special)
+          {
+                if($i%5 == 1)
+                    $str_spacial_res .= "<tr>";
+                        $str_spacial_res .= '<td style="border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;" width="20%" height="36" align="center" valign="middle" bgcolor="#666666">'.$row_special.'</td>';
+                if($i%5 == 0)
+                    $str_spacial_res .= "</tr>";
+                $i++;
+                if($i > 10)
+                    break;
+          }
+          
+          $arr_consolation          = explode("|",$str_Consolation);
+          $i = 1;
+          $str_Consolation_res = "";
+          foreach($arr_consolation as $row_consolation)
+          {
+                if($i%5 == 1)
+                    $str_Consolation_res        .= "<tr>";
+                        $str_Consolation_res    .= '<td style="border-left: 1px black solid;border-bottom: 1px black solid;;border-top: 1px black solid;" width="20%" height="36" align="center" valign="middle" bgcolor="#666666">'.$row_consolation.'</td>';
+                if($i%5 == 0)
+                    $str_Consolation_res        .= "</tr>";
+                $i++;
+                if($i > 10)
+                    break;
+          }
+          
+          
+          //return
+          $arr = array(
+                        "span_date"             =>$span_date,
+                        "str_Draw_No"           =>$str_Draw_No,
+                        "str_1st"               =>$str_1st,
+                        "str_2nd"               =>$str_2nd,
+                        "str_3rd"               =>$str_3rd,
+                        "str_Lotto_1st"         =>$str_Lotto_1st,        
+                        "str_Lotto_2nd"         =>$str_Lotto_2nd,        
+                        "str_spacial_res"       =>$str_spacial_res,
+                        "str_loto"              =>$str_Loto,
+                        "str_lotoDraw"          =>$str_Loto_drawno,
+                        "str_lotoDay"           =>$loto_date,
+                        "str_Consolation_res"   =>$str_Consolation_res,
+                        //"str_date"              =>$str_date,
+                        "flag"                  =>1
+                        );
+      }
+      else
+        $arr = array("flag"                 =>0,
+                    //"str_date"              =>$str_date
+                    );
+                    
+      return $arr;
+    }
+}

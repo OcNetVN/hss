@@ -1,0 +1,1 @@
+<script src="<?php echo base_url('assets/js/app/setting/hirstory_4d_number.js'); ?>"></script>

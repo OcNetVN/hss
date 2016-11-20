@@ -1,0 +1,92 @@
+<?php
+class M_soccer extends CI_Model
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function SaveFileHtml()
+    {
+    	$lang = "";
+    	$data = $_POST['save_today']; 
+    	 if($this->lang->line(LANG_EN) == "English")
+         {
+         	$lang = "EN";
+         }
+         else
+         {
+            $lang= "CN";
+         }
+    	if (!file_exists('assets/html/'.$lang.'/')) 
+    	{        
+			mkdir('assets/html/'.$lang.'/', 0755, true);
+		}
+
+		$copyname =  'assets/html/'.$lang.'/soccer_today.html';   
+
+		$handle = fopen($copyname , 'w+');  
+		if($handle)
+		 {
+		 	if(fwrite($handle, $data ))
+		 		echo "ok";
+		 }
+			fclose($handle);
+    }
+
+    public function SaveFileHtmlEarly()
+    {
+        $lang = "";
+        $data = $_POST['save_today']; 
+         if($this->lang->line(LANG_EN) == "English")
+         {
+            $lang = "EN";
+         }
+         else
+         {
+            $lang= "CN";
+         }
+        if (!file_exists('assets/html/'.$lang.'/')) 
+        {        
+            mkdir('assets/html/'.$lang.'/', 0755, true);
+        }
+
+        $copyname =  'assets/html/'.$lang.'/soccer_early.html';   
+
+        $handle = fopen($copyname , 'w+');  
+        if($handle)
+         {
+            if(fwrite($handle, $data ))
+                echo "ok";
+         }
+            fclose($handle);
+    }
+
+    public function SaveFileHtmlLvie()
+    {
+        $lang = "";
+        $data = $_POST['save_today']; 
+         if($this->lang->line(LANG_EN) == "English")
+         {
+            $lang = "EN";
+         }
+         else
+         {
+            $lang= "CN";
+         }
+        if (!file_exists('assets/html/'.$lang.'/')) 
+        {        
+            mkdir('assets/html/'.$lang.'/', 0755, true);
+        }
+
+        $copyname =  'assets/html/'.$lang.'/soccer_live.html';   
+
+        $handle = fopen($copyname , 'w+');  
+        if($handle)
+         {
+            if(fwrite($handle, $data ))
+                echo "ok";
+         }
+            fclose($handle);
+    }
+}

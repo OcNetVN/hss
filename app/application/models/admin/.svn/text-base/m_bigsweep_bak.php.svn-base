@@ -1,0 +1,405 @@
+<?php
+class M_bigsweep extends CI_Model{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    /*
+    |----------------------------------------------------------------
+    | function convert all
+    |----------------------------------------------------------------
+    */
+    function btnconvertall_bigsweep()
+    {
+        if(isset($_POST['ContentConvert']))
+        {
+            $txday                  = date("Ymd");
+            $ContentConvert         = $_POST['ContentConvert'];
+            $arr_content            = explode("\n",$ContentConvert);
+            
+            //get draw date, draw no
+            $search_drawdate        = 'Draw Date';
+            $res_draw               = array_filter($arr_content, function ($item) use ($search_drawdate) 
+            {
+                if (stripos($item, $search_drawdate) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_draw as $key  => $val)
+            {
+                $key_row_draw      = (int)$key;
+            }
+            $str_temp       = trim($arr_content[$key_row_draw]);
+            $arr_temp       = explode(" ",$str_temp);
+            $arr_drawdate   = explode("/",$arr_temp[2]);
+            $txday          = $arr_drawdate[2].$arr_drawdate[1].$arr_drawdate[0];
+            $showdate       = $arr_temp[2];
+            $drawno         = $arr_temp[10];
+            
+            //get RM Jackpot 1
+            $prize                  = 'JACKPOT 1';
+            $res_prize              = array_filter($arr_content, function ($item) use ($prize) 
+            {
+                if (stripos($item, $prize) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_prize as $key  => $val)
+            {
+                $key_row_prize      = (int)$key + 1;
+            }
+            $str_jp1                = substr($arr_content[$key_row_prize],2,(strlen($arr_content[$key_row_prize])-2));
+            
+            
+            //get RM Jackpot 2
+            $prize                  = 'JACKPOT 2';
+            $res_prize              = array_filter($arr_content, function ($item) use ($prize) 
+            {
+                if (stripos($item, $prize) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_prize as $key  => $val)
+            {
+                $key_row_prize      = (int)$key + 1;
+            }
+            $str_jp2                = substr($arr_content[$key_row_prize],2,(strlen($arr_content[$key_row_prize])-2));
+            
+            //get mainprize, jackpot prize
+            $mainprize              = 'MAIN PRIZE';
+            $res_mainprize          = array_filter($arr_content, function ($item) use ($mainprize) 
+            {
+                if (stripos($item, $mainprize) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_mainprize as $key  => $val)
+            {
+                $key_row_mainprize      = (int)$key + 1;
+            }
+            $arr_res_mainprize          = array();
+            for($i = $key_row_mainprize; $i < ($key_row_mainprize + 6); $i ++)
+            {
+                $str_temp               = substr($arr_content[$i],3,(strlen($arr_content[$i])-3));
+                $arr_mainprize          = explode("RM",$str_temp);
+                $arr_str_mainprize      = array($arr_mainprize[0],$arr_mainprize[1]);
+                if(count($arr_mainprize) == 3)
+                    $arr_str_mainprize[]= $arr_mainprize[2];
+                else
+                    $arr_str_mainprize[]= "";
+                
+                $arr_res_mainprize[]    = $arr_str_mainprize;
+            }
+            
+            //get 10 stater prizes
+            $startprize                         = '10 Starter Prizes';
+            $res_startprize                     = array_filter($arr_content, function ($item) use ($startprize) 
+            {
+                if (stripos($item, $startprize) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_startprize as $key  => $val)
+            {
+                $key_row_startprize             = (int)$key + 1;
+            }
+            $arr_startprize                     = array();
+            for($i = 0; $i < 10; $i ++)
+            {
+                if($i == 0 )
+                    $arr_startprize[]           = substr($arr_content[$key_row_startprize],0,7);
+                else
+                    $arr_startprize[]           = substr($arr_content[$key_row_startprize],(7*$i),7);
+            }
+            
+            //get 45 special specials
+            $specialprize                         = '45 Special Prize';
+            $res_specialprize                     = array_filter($arr_content, function ($item) use ($specialprize) 
+            {
+                if (stripos($item, $specialprize) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_specialprize as $key  => $val)
+            {
+                $key_row_specialprize             = (int)$key + 1;
+            }
+            $arr_specialprize                     = array();
+            for($i = 0; $i < 45; $i ++)
+            {
+                if($i == 0 )
+                    $arr_specialprize[]             = substr($arr_content[$key_row_specialprize],0,7);
+                else
+                    $arr_specialprize[]             = substr($arr_content[$key_row_specialprize],(7*$i),7);
+            }
+            
+            //get 90 consolation prize
+            $consolationprize                         = '90 Consolation Prize';
+            $res_consolationprize                     = array_filter($arr_content, function ($item) use ($consolationprize) 
+            {
+                if (stripos($item, $consolationprize) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_consolationprize as $key  => $val)
+            {
+                $key_row_consolationprize             = (int)$key + 1;
+            }
+            $str_consolation_temp                     = str_replace(" ","",$arr_content[$key_row_consolationprize]);
+            $arr_consolationprize                     = array();
+            for($i = 0; $i < 90; $i ++)
+            {
+                if($i == 0 )
+                    $arr_consolationprize[]             = substr($str_consolation_temp,0,7);
+                else
+                    $arr_consolationprize[]             = substr($str_consolation_temp,(7*$i),7);
+            }
+            
+            
+            //get 18 prize
+            $prize18                         = '18 prizes of';
+            $res_prize18                     = array_filter($arr_content, function ($item) use ($prize18) 
+            {
+                if (stripos($item, $prize18) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_prize18 as $key  => $val)
+            {
+                $key_row_prize18             = (int)$key + 1;
+            }
+            $str_18_temp                     = str_replace(" ","",$arr_content[$key_row_prize18]);
+            $arr_prize18                     = array();
+            for($i = 0; $i < 3; $i ++)
+            {
+                if($i == 0 )
+                    $arr_prize18[]             = substr($str_18_temp,0,6);
+                else
+                    $arr_prize18[]             = substr($str_18_temp,(6*$i),6);
+            }
+            
+            //get 189 prize
+            $prize189                         = '189 prizes of';
+            $res_prize189                     = array_filter($arr_content, function ($item) use ($prize189) 
+            {
+                if (stripos($item, $prize189) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_prize189 as $key  => $val)
+            {
+                $key_row_prize189             = (int)$key + 1;
+            }
+            $str_189_temp                     = str_replace(" ","",$arr_content[$key_row_prize189]);
+            $arr_prize189                     = array();
+            for($i = 0; $i < 3; $i ++)
+            {
+                if($i == 0 )
+                    $arr_prize189[]             = substr($str_189_temp,0,5);
+                else
+                    $arr_prize189[]             = substr($str_189_temp,(5*$i),5);
+            }
+            
+            
+            //get 1890 prize
+            $prize1890                         = '1,890 prizes of';
+            $res_prize1890                     = array_filter($arr_content, function ($item) use ($prize1890) 
+            {
+                if (stripos($item, $prize1890) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_prize1890 as $key  => $val)
+            {
+                $key_row_prize1890             = (int)$key + 1;
+            }
+            $str_1890_temp                     = str_replace(" ","",$arr_content[$key_row_prize1890]);
+            $arr_prize1890                     = array();
+            for($i = 0; $i < 3; $i ++)
+            {
+                if($i == 0 )
+                    $arr_prize1890[]             = substr($str_1890_temp,0,4);
+                else
+                    $arr_prize1890[]             = substr($str_1890_temp,(4*$i),4);
+            }
+            
+            
+            //get 6300 prize
+            $prize6300                         = '6,300 prizes of';
+            $res_prize6300                     = array_filter($arr_content, function ($item) use ($prize6300) 
+            {
+                if (stripos($item, $prize6300) !== false) 
+                {
+                    return true;
+                }
+                return false;
+            });
+            foreach($res_prize6300 as $key  => $val)
+            {
+                $key_row_prize6300             = (int)$key + 1;
+            }
+            $str_prize6300                     = str_replace(" ","",$arr_content[$key_row_prize6300]);
+            
+            
+            //return
+            $arr                                = array(
+                                                    "txday"                 => $txday,
+                                                    "showdate"              => $showdate,
+                                                    "drawno"                => $drawno,
+                                                    "str_jp1"               => $str_jp1,
+                                                    "str_jp2"               => $str_jp2,
+                                                    "arr_res_mainprize"     => $arr_res_mainprize,
+                                                    "arr_startprize"        => $arr_startprize,
+                                                    "arr_specialprize"      => $arr_specialprize,
+                                                    "arr_consolationprize"  => $arr_consolationprize,
+                                                    "arr_prize18"           => $arr_prize18,
+                                                    "arr_prize189"          => $arr_prize189,
+                                                    "arr_prize1890"         => $arr_prize1890,
+                                                    "str_prize6300"         => $str_prize6300,
+                                                    );
+            return $arr;
+        }
+    }
+    /*
+	|----------------------------------------------------------------
+	| function save all bigsweep
+	|----------------------------------------------------------------
+	*/
+    public function btnsaveall_bigsweep()
+    {
+        if(isset($_POST["spandrawno"]))
+        {
+            $span_date          =   $_POST["span_date"];
+            $arr_date           =   explode("/",$span_date);
+            $str_date           =   $arr_date[2].$arr_date[1].$arr_date[0];
+            $spandrawno         =   $_POST["spandrawno"];
+            $spanjp1            =   $_POST["spanjp1"];
+            $spanjp2            =   $_POST["spanjp2"];
+            
+            $spanno1            =   $_POST["spanno1"];
+            $span1st            =   $_POST["span1st"];
+            $spanjp1prize       =   $_POST["spanjp1prize"];
+            $str_1st            =   $spanno1."|".$span1st."|".$spanjp1prize;
+            
+            $spanno2            =   $_POST["spanno2"];
+            $span2nd            =   $_POST["span2nd"];
+            $spanjp2prize       =   $_POST["spanjp2prize"];
+            $str_2nd            =   $spanno2."|".$span2nd."|".$spanjp2prize;
+            
+            $spanno3            =   $_POST["spanno3"];
+            $span3rd            =   $_POST["span3rd"];
+            $spanjp3prize       =   $_POST["spanjp3prize"];
+            $str_3rd            =   $spanno3."|".$span3rd."|".$spanjp3prize;
+            
+            $spanno4            =   $_POST["spanno4"];
+            $span4th            =   $_POST["span4th"];
+            $spanjp4prize       =   $_POST["spanjp4prize"];
+            $str_4th            =   $spanno4."|".$span4th."|".$spanjp4prize;
+            
+            $spanno5            =   $_POST["spanno5"];
+            $span5th            =   $_POST["span5th"];
+            $spanjp5prize       =   $_POST["spanjp5prize"];
+            $str_5th            =   $spanno5."|".$span5th."|".$spanjp5prize;
+            
+            $spanno6            =   $_POST["spanno6"];
+            $span6th            =   $_POST["span6th"];
+            $spanjp6prize       =   $_POST["spanjp6prize"];
+            $str_6th            =   $spanno6."|".$span6th."|".$spanjp6prize;
+            
+            $arr_start          =   $_POST["arr_start"];
+            $arr_special        =   $_POST["arr_special"];
+            $arr_consolation    =   $_POST["arr_consolation"];
+            $arr_prize18        =   $_POST["arr_prize18"];
+            $arr_prize189       =   $_POST["arr_prize189"];
+            $arr_prize1890      =   $_POST["arr_prize1890"];
+            $span6300prize      =   $_POST["span6300prize"];
+            
+            $str_start          =   "";
+            foreach($arr_start as $row_start)
+            {
+                $str_start      .=  $row_start."|";
+            }
+            $str_start          =   substr($str_start,0,(strlen($str_start)-1));
+            
+            $str_special        =   "";
+            foreach($arr_special as $row_special)
+            {
+                $str_special    .=  $row_special."|";
+            }
+            $str_special        =   substr($str_special,0,(strlen($str_special)-1));
+            
+            $str_consolation    =   "";
+            foreach($arr_consolation as $row_consolation)
+            {
+                $str_consolation.=  $row_consolation."|";
+            }
+            $str_consolation    =   substr($str_consolation,0,(strlen($str_consolation)-1));
+            
+            $str_prize18        =   "";
+            foreach($arr_prize18 as $row_prize18)
+            {
+                $str_prize18    .=  $row_prize18."|";
+            }
+            $str_prize18        =   substr($str_prize18,0,(strlen($str_prize18)-1));
+            
+            $str_prize189       =   "";
+            foreach($arr_prize189 as $row_prize189)
+            {
+                $str_prize189   .=  $row_prize189."|";
+            }
+            $str_prize189       =   substr($str_prize189,0,(strlen($str_prize189)-1));
+                
+            $str_prize1890      =   "";
+            foreach($arr_prize1890 as $row_prize1890)
+            {
+                $str_prize1890  .=  $row_prize1890."|";
+            }
+            $str_prize1890      =   substr($str_prize1890,0,(strlen($str_prize1890)-1));
+            $check_isset_row_db     = (int)$this->m_common_lottery->check_isset_row_by_table_txday("lot_bigsweep",$str_date)->total;
+            
+            if($check_isset_row_db > 0)
+            {
+                $sql                = "UPDATE `lot_bigsweep` 
+                                    SET `Draw_No` = '$spandrawno', `jp1` = '$spanjp1', `jp2` = '$spanjp2', `1st` = '$str_1st', 
+                                        `2nd` = '$str_2nd', `3rd` = '$str_3rd', `4th` = '$str_4th', `5th` = '$str_5th', 
+                                        `6th` = '$str_6th', `10StarterPrize` = '$str_start', `45SpecialPrize` = '$str_special', 
+                                        `90ConPrize` = '$str_consolation', `18Prize` = '$str_prize18', 
+                                        `189Prize` = '$str_prize189', `1890Prize` = '$str_prize1890' 
+                                    WHERE `txday` = '$str_date'";
+            }
+            else
+            {
+                $sql                =   "INSERT INTO 
+                                    `lot_bigsweep` (  `txday`,      `Draw_No`,      `jp1`,      `jp2`,      `1st`,      `2nd`,      `3rd`,      `4th`,      `5th`,      `6th`,  `10StarterPrize`, `45SpecialPrize`,    `90ConPrize`,      `18Prize`,      `189Prize`,       `1890Prize`,     `6300Prize`) 
+                                            VALUES ('$str_date', '$spandrawno',  '$spanjp1', '$spanjp2', '$str_1st', '$str_2nd', '$str_3rd', '$str_4th', '$str_5th', '$str_6th', '$str_start',     '$str_special', '$str_consolation', '$str_prize18', '$str_prize189', '$str_prize1890', '$span6300prize')";
+            }
+            $query              =   $this->db->query($sql);
+            
+            if($query)
+                return 1;
+            else
+                return 0;
+        }
+    }
+    
+}

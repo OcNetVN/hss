@@ -1,0 +1,48 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td>
+        <table border="0" width="100%" cellspacing="2" cellpadding="2" style="background-color: #87CEFA;">
+            <tbody>
+                <tr>
+                    <td  align="left">
+                      <a href="<?php echo base_url('/app/menu') ?>">
+                        <input type="image" name="" id="" title="Back" src="<?php echo base_url('assets/img/app/btn-back.png') ?>" onclick="history.back(); return false;" style="height:50px;width:50px;border-width:0px;">
+                      </a>  
+                    </td>
+                    <td align="center">
+                        <div style="vertical-align: middle; color: white;">
+                              <b>Live</b>
+                        </div>
+                    </td>
+                    <td  align="right">
+                        <a href="<?php echo base_url('/app/soccer/result') ?>">
+                            <input type="image" name="" id="" title="Result" src="<?php echo base_url('assets/img/app/result_en.png') ?>" style="height:50px;width:50px;border-width:0px;">
+                        </a>
+                        <a href="<?php echo base_url('/app/soccer/alltable') ?>">
+                            <input type="image" name="" id="" title="Table" src="<?php echo base_url('assets/img/app/table_en.png') ?>" style="height:50px;width:50px;border-width:0px;">
+                        </a>
+                        <a href="<?php echo base_url('/app/login') ?>">
+                            <input type="image" name="" id="" title="Logout" src="<?php echo base_url('assets/img/app/btn-on.png') ?>" style="height:40px;width:40px;border-width:0px;">
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+  </tr>
+  <tr>
+    <td id="tbllistracecard">
+      <table width="100%" border="1" cellspacing="0" cellpadding="0" style="font-weight:bold;">
+        <tr>
+            <td>
+                <div style="overflow-y: scroll;height:750px;">
+                 <?php echo $HTMLInfo;?>
+                </div>
+            </td>
+        </tr>
+      </table>
+    </td>
+  </tr> 
+
+  <!-- add footer view list menu soccer ngày 10/07/2015-->
+  

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/HorseRacing/!svn/ver/1784/Source/app/application/views/app/soccer
+END
+live_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/HorseRacing/!svn/ver/1778/Source/app/application/views/app/soccer/live_view.php
+END
+earlymarket_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/HorseRacing/!svn/ver/1778/Source/app/application/views/app/soccer/earlymarket_view.php
+END
+ifr_live_score.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/HorseRacing/!svn/ver/1756/Source/app/application/views/app/soccer/ifr_live_score.php
+END
+all_tables_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/HorseRacing/!svn/ver/1590/Source/app/application/views/app/soccer/all_tables_view.php
+END
+main_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/HorseRacing/!svn/ver/1774/Source/app/application/views/app/soccer/main_view.php
+END
+main_menu_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/HorseRacing/!svn/ver/1771/Source/app/application/views/app/soccer/main_menu_view.php
+END
+live_score_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/HorseRacing/!svn/ver/1756/Source/app/application/views/app/soccer/live_score_view.php
+END
+number_detail_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/HorseRacing/!svn/ver/1538/Source/app/application/views/app/soccer/number_detail_view.php
+END
+detail_tables_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/HorseRacing/!svn/ver/1590/Source/app/application/views/app/soccer/detail_tables_view.php
+END
+league_tables_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/HorseRacing/!svn/ver/1590/Source/app/application/views/app/soccer/league_tables_view.php
+END
+footer_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/HorseRacing/!svn/ver/1784/Source/app/application/views/app/soccer/footer_view.php
+END
+result_view.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/HorseRacing/!svn/ver/1541/Source/app/application/views/app/soccer/result_view.php
+END
